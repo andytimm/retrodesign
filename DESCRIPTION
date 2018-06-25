@@ -1,11 +1,28 @@
 Package: retrodesign
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Tools For Type S (Sign) and Type M (Magnitude) errors
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: as.person(c(
+    "Andy Timm <timmandrew1@gmail.com> [aut, cre]", 
+    "Andrew Gelman [ctb]",
+    "John Carlin [ctb]"
+  ))
+Description: This package provides tools for working with Type S (Sign) and
+    Type M (Magnitude) errors, as proposed in Gelman and Tuerlinckx (2000) and
+    Gelman & Carlin (2014). In addition to simply calculating the probability of
+    Type S/M error, the package includes functions for calculating these errors
+    across a variety of effect sizes for comparison, and reccomended sample size
+    given 'tolerances' for Type S/M errors. To improve the effiency of these
+    calculations, closed forms solutions for the probability of a Type S/M error
+    from Lu, Qiu, and Deng (2018) are implemented. As of 0.1.0, this includes
+    support only for simple research designs, but I will expand it to ANOVA and
+    other more complicated designs in the future with community support. See the
+    package vignette for a fuller exposition on how Type S/M errors arise in
+    research, and how to analyze them using the type of design analysis proposed
+    in the above papers.
+Depends: R (>= 3.1.0)
+License: MIT + file LICENSE
+URL: https://github.com/andytimm/retrodesign
+BugReports: https://github.com/andytimm/retrodesign/issues
 Encoding: UTF-8
 LazyData: true
