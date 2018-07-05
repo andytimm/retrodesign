@@ -2,9 +2,7 @@
 % Please edit documentation in R/simple_hypothesis_tests.R
 \name{retrodesign.numeric}
 \alias{retrodesign.numeric}
-\title{Calculates Power, Type S, and Type M error and returns them in a list.
-Function originally provided in Gelman and Carlin (2014), reused with
-permission under the MIT license.}
+\title{Numeric retrodesign}
 \usage{
 \method{retrodesign}{numeric}(A, s, alpha = 0.05, df = Inf,
   n.sims = 10000)
@@ -21,10 +19,13 @@ permission under the MIT license.}
 \item{n.sims}{a numeric, how many times to simulate when calculating Type M
 error}
 }
+\value{
+A list of length 3 containing the power, type s, and type M
+error.
+}
 \description{
-Calculates Power, Type S, and Type M error and returns them in a list.
-Function originally provided in Gelman and Carlin (2014), reused with
-permission under the MIT license.
+retrodesign.numeric is the S3 method of the generic retrodesign() function,
+used when a single numeric is passed for A.
 }
 \examples{
 retrodesign(1,3.28)

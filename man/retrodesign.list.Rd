@@ -2,14 +2,12 @@
 % Please edit documentation in R/simple_hypothesis_tests.R
 \name{retrodesign.list}
 \alias{retrodesign.list}
-\title{Calculates Power, Type S, and Type M error and returns them in a list.
-Function originally provided in Gelman and Carlin (2014), reused with
-permission under the MIT license.}
+\title{List retrodesign}
 \usage{
 \method{retrodesign}{list}(A, s, alpha = 0.05, df = Inf, n.sims = 10000)
 }
 \arguments{
-\item{A}{a numeric, an estimate of the true effect size}
+\item{A}{a list, estimates of the true effect size}
 
 \item{s}{a numeric, standard error of the estimate}
 
@@ -20,10 +18,13 @@ permission under the MIT license.}
 \item{n.sims}{a numeric, how many times to simulate when calculating Type M
 error}
 }
+\value{
+A df that is 4 by length(A), with an effect size
+and it's corresponding power, type s, and type m errors in each row.
+}
 \description{
-Calculates Power, Type S, and Type M error and returns them in a list.
-Function originally provided in Gelman and Carlin (2014), reused with
-permission under the MIT license.
+retrodesign.list is the S3 method of the generic retrodesign() function,
+used when a list is passed for A.
 }
 \examples{
 retrodesign(1,3.28)
