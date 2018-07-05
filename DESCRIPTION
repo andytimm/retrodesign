@@ -12,7 +12,7 @@ Description: This package provides tools for working with Type S (Sign) and
     Gelman & Carlin (2014). In addition to simply calculating the probability of
     Type S/M error, the package includes functions for calculating these errors
     across a variety of effect sizes for comparison, and reccomended sample size
-    given 'tolerances' for Type S/M errors. To improve the effiency of these
+    given 'tolerances' for Type S/M errors. To improve the speed of these
     calculations, closed forms solutions for the probability of a Type S/M error
     from Lu, Qiu, and Deng (2018) are implemented. As of 0.1.0, this includes
     support only for simple research designs, but I will expand it to ANOVA and
