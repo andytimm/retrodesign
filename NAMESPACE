@@ -3,4 +3,5 @@
 S3method(retrodesign,list)
 S3method(retrodesign,numeric)
 export(retrodesign)
+export(sim_plot)
 import(stats)

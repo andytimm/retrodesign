@@ -24,7 +24,7 @@ error, or if A is a list, a df that is 4 by length(A), with an effect size
 and it's corresponding power, type s, and type m errors in each row.
 }
 \description{
-Calculates Power, Type S, and Type M errorand returns them in a list, or
+Calculates Power, Type S, and Type M errorand returns them in a list or
 df, depending on whether a single true effect size or range is provided.
 Function originally provided in Gelman and Carlin (2014), reused with
 permission under the MIT license.
