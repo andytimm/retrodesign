@@ -4,7 +4,7 @@
 \alias{sim_plot}
 \title{sim_plot: visualize type S/M errors}
 \usage{
-sim_plot(A, s, alpha = 0.05, df = Inf, n.sims = 5000)
+sim_plot(A, s, alpha = 0.05, df = Inf, n.sims = 5000, gg = TRUE)
 }
 \arguments{
 \item{A}{a numeric, an estimate of the true effect size}
@@ -17,6 +17,8 @@ sim_plot(A, s, alpha = 0.05, df = Inf, n.sims = 5000)
 
 \item{n.sims}{a numeric, how many times to simulate when calculating Type M
 error}
+
+\item{gg}{If TRUE and ggplot2 is installed, uses ggplot2 for graphic}
 }
 \value{
 A list of length 3 containing the power, type s, and type M
@@ -25,7 +27,7 @@ error.
 \description{
 Graphs type S/M errors resulting from a simulation using the provided
 parameters (using the same simulation method as retrodesign()). Can
-optionally display in color or using ggplot.
+optionally display using ggplot.
 }
 \examples{
 sim_plot(1,3.28)
