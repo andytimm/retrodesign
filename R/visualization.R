@@ -26,15 +26,15 @@ sim_plot <- function(A, s, alpha=.05, df=Inf, n.sims=5000){
   power <- p.hi + p.lo
   typeS <- p.lo/power
   estimate <- A + s*rt(n.sims,df)
-  plot(estimate, pch=ifelse((estimate>s*z) & (!estimate< -s*z),0,
+  graphics::plot(estimate, pch=ifelse((estimate>s*z) & (!estimate< -s*z),0,
                             ifelse((!estimate>s*z) & (estimate< -s*z),2,
                             ifelse((!estimate>s*z) & (!estimate< -s*z),1,1))),
        col=ifelse((!estimate>s*z) & (!estimate< -s*z),"grey","black"))
 
   #pch=ifelse((estimate>s*z), 0, 1)
-  abline(h=s*z)
-  abline(h= -s*z)
-  abline(h=A,lty=3,lwd=3)
+  graphics::abline(h=s*z)
+  graphics::abline(h= -s*z)
+  graphics::abline(h=A,lty=3,lwd=3)
 
 
 

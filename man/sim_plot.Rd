@@ -29,4 +29,5 @@ optionally display in color or using ggplot.
 }
 \examples{
 sim_plot(1,3.28)
+sim_plot(.5,1)
 }
