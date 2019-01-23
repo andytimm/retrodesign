@@ -16,6 +16,7 @@
 #' error.
 #' @examples
 #' sim_plot(1,3.28)
+#' sim_plot(.5,1)
 #' @export
 #' @import stats
 sim_plot <- function(A, s, alpha=.05, df=Inf, n.sims=5000){
@@ -25,9 +26,17 @@ sim_plot <- function(A, s, alpha=.05, df=Inf, n.sims=5000){
   power <- p.hi + p.lo
   typeS <- p.lo/power
   estimate <- A + s*rt(n.sims,df)
-  plot(estimate)
+  plot(estimate, pch=ifelse((estimate>s*z) & (!estimate< -s*z),0,
+                            ifelse((!estimate>s*z) & (estimate< -s*z),2,
+                            ifelse((!estimate>s*z) & (!estimate< -s*z),1,1))),
+       col=ifelse((!estimate>s*z) & (!estimate< -s*z),"grey","black"))
+
+  #pch=ifelse((estimate>s*z), 0, 1)
   abline(h=s*z)
   abline(h= -s*z)
+  abline(h=A,lty=3,lwd=3)
 
-  return(estimate)
+
+
+  #return(estimate)
 }
