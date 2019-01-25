@@ -23,7 +23,7 @@ Calculates Power, Type S, and Type M error and returns them in a list or
 df, depending on whether a single true effect size or range is provided.
 Uses the closed form solution found for the Type-M error found by Lu et al.
 (2018), and thus is faster than retrodesign. For t distributions, use
-retrodesign instead; the closed form solution only applies in the normal
+retrodesign() instead; the closed form solution only applies in the normal
 case.
 }
 \examples{

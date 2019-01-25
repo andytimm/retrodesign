@@ -99,7 +99,7 @@ retrodesign.list <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
 #' df, depending on whether a single true effect size or range is provided.
 #' Uses the closed form solution found for the Type-M error found by Lu et al.
 #' (2018), and thus is faster than retrodesign. For t distributions, use
-#' retrodesign instead; the closed form solution only applies in the normal
+#' retrodesign() instead; the closed form solution only applies in the normal
 #' case.
 #'
 #'
@@ -158,8 +158,7 @@ retro_design.numeric <- function(A, s, alpha=.05){
 #' @return A df that is 4 by length(A), with an effect size
 #' and it's corresponding power, type s, and type m errors in each row.
 #' @examples
-#' retrodesign(1,3.28)
-#' retrodesign(2,8.1)
+#' retro_design(list(.2,2,20),8.1)
 #' @export
 retro_design.list <- function(A, s, alpha=.05){
 
@@ -175,3 +174,73 @@ retro_design.list <- function(A, s, alpha=.05){
   return(ret_df)
 }
 
+#' type_s
+#'
+#' Calculates type s error.
+#'
+#' @param A a numeric or list, estimate(s) of the true effect size
+#' @param s a numeric, standard error of the estimate
+#' @param alpha a numeric, the statistical significance threshold
+#' @return either the type S, a numeric if a single A is provided, or a df
+#' of length 2 by A, with the effect size and corresponding type S error in
+#' each row.
+#' @examples
+#' type_s(1,3.28)
+#' type_s(list(.2,2,20),8.1)
+#' @export
+#' @import stats
+type_s <- function (A, s, alpha=.05) {
+  UseMethod("type_s", A)
+}
+
+#' Numeric type_s
+#'
+#' this is the S3 method of the generic type_s() function,
+#' used when a numeric is passed for A.
+#'
+#' @param A a numeric, estimate of the true effect size
+#' @param s a numeric, standard error of the estimate
+#' @param alpha a numeric, the statistical significance threshold
+#' @return either the type S, a numeric if a single A is provided, or a df
+#' of length 2 by A, with the effect size and corresponding type S error in
+#' each row.
+#' @examples
+#' type_s(1,3.28)
+#' @export
+#' @import stats
+type_s.numeric <- function(A, s, alpha=.05){
+  z <- qt(1-alpha/2, df=Inf)
+  p.hi <- 1 - pt(z-A/s, df=Inf)
+  p.lo <- pt(-z-A/s, df=Inf)
+  power <- p.hi + p.lo
+  typeS <- p.lo/power
+
+  return(list(type_s=typeS))
+}
+
+#' List type_s
+#'
+#' type_s.list is the S3 method of the generic type_s() function,
+#' used when a list is passed for A.
+#'
+#' @param A a list, estimates of the true effect size
+#' @param s a numeric, standard error of the estimate
+#' @param alpha a numeric, the statistical significance threshold
+#' @return A df that is 2 by length(A), with an effect size
+#' and it's correspondingtype s errors in each row.
+#' @examples
+#' type_s(list(.2,2,20),8.1)
+#' @export
+type_s.list <- function(A, s, alpha=.05){
+
+  list_of_lists <- lapply(A,type_s.numeric,s,alpha)
+  matrix_form <- do.call(rbind,list_of_lists)
+
+  mat_with_effects <- cbind(A,matrix_form)
+  ret_df <- as.data.frame(mat_with_effects)
+
+  names <- c("effect_size","type_s")
+  colnames(ret_df) <- names
+
+  return(ret_df)
+}
