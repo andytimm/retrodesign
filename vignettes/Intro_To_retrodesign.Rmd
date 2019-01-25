@@ -1,0 +1,56 @@
+---
+title: "An Introduction to Type S and M errors in Hypothosis Testing"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+```
+
+```{r, include=FALSE}
+library(retrodesign)
+```
+
+In light of the replication and reproducibility crisis, researchers across
+many fields have been rexamining their relationship with the Null Hypthosis
+Significance Testing (NHST) framework,
+and developing tools to more fully understand the implications of their research
+designs for replicable and reproducible science. One major paper in this vein is
+Gelman and Carlin's [Assessing Type S and Type M Errors](http://www.stat.columbia.edu/~gelman/research/published/retropower20.pdf)
+ (2014), which argues that controlling for power, type I errors, and type II
+ errors are insufficient to fully capture the risks of NHST analyses. Instead,
+ they argue for consideration of type S (sign), and M (magnitude or
+ exaggeration) errors, which more fully capture the limitations of NHST, 
+ especially those that are underpowered.
+
+
+**retrodesign** is a package designed to help researchers better understand type s
+and m errors, and their implications for their research. In this vingette, I
+introduce both the need for the type S/M error metrics, and the tools
+retrodesign provides for examining them. I assume only a basic familiarity with
+hypothesis testing, and provide definitional reminders along the way.
+
+## An Initial Example
+
+## A Severe Example
+
+## Assessing Type S/M errors when you don't have prior information
+
+## So how worried should we be?
+
+As [Lu et al.](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
+(2018) note, the type s and m error shrink at very different rates as power
+rises. 
+
+The probability of type S error decreases fast. To ensure that $s ≤ 0.1$
+and $s ≤ 0.01$, we only need $power = 0.08$ and $power = 0.17$, respectively. Thus,
+unless your study is severely underpowered for your effect size, you shouldn't
+need to worry about type s errors very often.
