@@ -13,7 +13,8 @@ retrodesign(A, s, alpha = 0.05, df = Inf, n.sims = 10000)
 
 \item{alpha}{a numeric, the statistical significance threshold}
 
-\item{df}{a numeric, the degrees of freedom}
+\item{df}{a numeric, the degrees of freedom. df=Inf is equivalent
+to a normal distribution.}
 
 \item{n.sims}{a numeric, how many times to simulate when calculating Type M
 error}

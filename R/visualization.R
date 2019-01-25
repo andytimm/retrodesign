@@ -41,6 +41,20 @@ sim_plot <- function(A, s, alpha=.05, df=Inf, n.sims=5000,gg=TRUE){
       ggplot2::xlab("n")
   }
 
+  # if (!requireNamespace("ggplot2", quietly = TRUE) & gg==TRUE){
+  #   print("You don't seem to have ggplot2 installed, please install it,
+  #         or use gg==FALSE. Defaulting to non-ggplot graphic:")
+  #
+  #   graphics::plot(estimate, pch=ifelse((estimate>s*z) & (!estimate< -s*z),0,
+  #           ifelse((!estimate>s*z) & (estimate< -s*z),2,
+  #             ifelse((!estimate>s*z) & (!estimate< -s*z),1,1))),
+  #               col=ifelse((!estimate>s*z) & (!estimate< -s*z),"grey","black"))
+  #
+  #   graphics::abline(h=s*z)
+  #   graphics::abline(h= -s*z)
+  #   graphics::abline(h=A,lty=3,lwd=3)
+  # }
+
   else {
   graphics::plot(estimate, pch=ifelse((estimate>s*z) & (!estimate< -s*z),0,
                             ifelse((!estimate>s*z) & (estimate< -s*z),2,

@@ -16,7 +16,8 @@
 #' @param A a numeric or list, an estimate of the true effect size
 #' @param s a numeric, standard error of the estimate
 #' @param alpha a numeric, the statistical significance threshold
-#' @param df a numeric, the degrees of freedom
+#' @param df a numeric, the degrees of freedom. df=Inf is equivalent
+#' to a normal distribution.
 #' @param n.sims a numeric, how many times to simulate when calculating Type M
 #' error
 #' @return either a list of length 3 containing the power, type s, and type M
@@ -40,7 +41,8 @@ retrodesign <- function (A, s, alpha=.05, df=Inf, n.sims=10000) {
 #' @param A a numeric, an estimate of the true effect size
 #' @param s a numeric, standard error of the estimate
 #' @param alpha a numeric, the statistical significance threshold
-#' @param df a numeric, the degrees of freedom
+#' @param df a numeric, the degrees of freedom. df=Inf is equivalent
+#' to a normal distribution.
 #' @param n.sims a numeric, how many times to simulate when calculating Type M
 #' error
 #' @return A list of length 3 containing the power, type s, and type M
@@ -70,7 +72,8 @@ return(list(power=power, typeS=typeS, exaggeration=exaggeration))
 #' @param A a list, estimates of the true effect size
 #' @param s a numeric, standard error of the estimate
 #' @param alpha a numeric, the statistical significance threshold
-#' @param df a numeric, the degrees of freedom
+#' @param df a numeric, the degrees of freedom. df=Inf is equivalent
+#' to a normal distribution.
 #' @param n.sims a numeric, how many times to simulate when calculating Type M
 #' error
 #' @return A df that is 4 by length(A), with an effect size
@@ -240,6 +243,88 @@ type_s.list <- function(A, s, alpha=.05){
   ret_df <- as.data.frame(mat_with_effects)
 
   names <- c("effect_size","type_s")
+  colnames(ret_df) <- names
+
+  return(ret_df)
+}
+
+#' type_m
+#'
+#' Calculates type m error. Is calculated using simulation, and thus supports
+#' t distributions through the df parameter.
+#'
+#' @param A a numeric or list, estimate(s) of the true effect size
+#' @param s a numeric, standard error of the estimate
+#' @param alpha a numeric, the statistical significance threshold
+#' @param df a numeric, the number of degrees of freedom. df=Inf is equivalent
+#' to a normal distribution.
+#' @param n.sims a numeric, how many times to simulate when calculating Type M
+#' error
+#' @return either the type m error, a numeric if a single A is provided, or a df
+#' of length 2 by A, with the effect size and corresponding type m error in
+#' each row.
+#' @examples
+#' type_m(1,3.28)
+#' type_m(list(.2,2,20),8.1)
+#' @export
+#' @import stats
+type_m <- function (A, s, alpha=.05, df=Inf, n.sims=10000) {
+  UseMethod("type_m", A)
+}
+
+#' Numeric type_m
+#'
+#' this is the S3 method of the generic type_m() function,
+#' used when a numeric is passed for A.
+#'
+#' @param A a numeric, estimate of the true effect size
+#' @param s a numeric, standard error of the estimate
+#' @param alpha a numeric, the statistical significance threshold
+#' @param df a numeric, the number of degrees of freedom. df=Inf is equivalent
+#' to a normal distribution.
+#' @param n.sims a numeric, how many times to simulate when calculating Type M
+#' error
+#' @return either the type m, a numeric if a single A is provided, or a df
+#' of length 2 by A, with the effect size and corresponding type m error in
+#' each row.
+#' @examples
+#' type_m(1,3.28)
+#' @export
+#' @import stats
+type_m.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
+  z <- qt(1-alpha/2, df)
+  estimate <- A + s*rt(n.sims,df)
+  significant <- abs(estimate) > s*z
+  exaggeration <- mean(abs(estimate)[significant])/A
+  return(list(type_m=exaggeration))
+}
+
+#' List type_m
+#'
+#' type_m.list is the S3 method of the generic type_m() function,
+#' used when a list is passed for A.
+#'
+#' @param A a list, estimates of the true effect size
+#' @param s a numeric, standard error of the estimate
+#' @param alpha a numeric, the statistical significance threshold
+#' @param df a numeric, the number of degrees of freedom. df=Inf is equivalent
+#' to a normal distribution.
+#' @param n.sims a numeric, how many times to simulate when calculating Type M
+#' error
+#' @return A df that is 2 by length(A), with an effect size
+#' and it's correspondingtype m errors in each row.
+#' @examples
+#' type_s(list(.2,2,20),8.1)
+#' @export
+type_m.list <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
+
+  list_of_lists <- lapply(A,type_m.numeric,s,alpha)
+  matrix_form <- do.call(rbind,list_of_lists)
+
+  mat_with_effects <- cbind(A,matrix_form)
+  ret_df <- as.data.frame(mat_with_effects)
+
+  names <- c("effect_size","type_m")
   colnames(ret_df) <- names
 
   return(ret_df)
