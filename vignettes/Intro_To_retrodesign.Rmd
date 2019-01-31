@@ -25,12 +25,14 @@ Significance Testing (NHST) framework,
 and developing tools to more fully understand the implications of their research
 designs for replicable and reproducible science. One major paper in this vein is
 Gelman and Carlin's [Assessing Type S and Type M Errors](http://www.stat.columbia.edu/~gelman/research/published/retropower20.pdf)
- (2014), which argues that controlling for power, type I errors, and type II
- errors are insufficient to fully capture the risks of NHST analyses. Instead,
- they argue for consideration of type S (sign), and M (magnitude or
- exaggeration) errors, which more fully capture the limitations of NHST, 
- especially those that are underpowered.
-
+ (2014), which argues that looking at power, type I errors, and type II
+ errors are insufficient to fully capture the risks of NHST analyses, in that
+ such analysis focuses exessively on statistical significance. Instead,
+ they argue for consideration of the probability you'll get the sign on your
+ effect wrong, or type S error, and the factor by which the
+magnitude of your effect might be overestimated, or type M
+error. Together, these additional statistics more fully explain the dangers of
+working in the NHST framework, especially in noisy, small sample environments.
 
 **retrodesign** is a package designed to help researchers better understand type s
 and m errors, and their implications for their research. In this vingette, I
@@ -40,9 +42,113 @@ hypothesis testing, and provide definitional reminders along the way.
 
 ## An Initial Example
 
+To nail down the assumptions we're working with, we'll start with an abstract
+example; the second and third will draw on a real world scenario and follow
+Gelman and Carlin's suggested workflow for design analysis more closely.
+
+Let's say we're testing whether a true effect size is zero or not, in a two
+tailed test. 
+
+$$H _ { 0 } : \mu = 0 \quad \text { vs. } \quad H _ { 1 } : \mu \neq 0$$
+
+We're assuming that the test statistic here is normally distributed. As
+[Gelman and Tuerlinckx](http://www.stat.columbia.edu/~gelman/research/published/francis8.pdf)
+(2009) note, this is a pretty widely applicable assumption; through the Central
+Limit Theorem, it applies to common settings like differences between test and control
+groups in a randomized experiment, averages, or linear regression coefficients.
+If it helps, imagine the following in the context of one of those from your field.
+
+Traditionally, we'd focus on Type I/II errors. Type I error is
+rejecting the null hypothesis, when it is true. Type II error is
+ failing to reject the null hypothesis, when it is not true. The power, then
+ is just is the probability that the test correctly rejects the null hypothesis.
+
+Beyond those, we'll also consider:
+
+1. **Type S (sign)**: the test statistic is in the opposite direction of the effect size, given that
+it is statistically significant;
+2. **Type M (magnitude)**: the test statistic in magnitude exaggerates the effect size, given
+that it is statistically significant.
+
+Notice that both of these are conditional on the test statistic being statistically
+significant; we'll come back to this fact several times.
+
+To visualize these, we'll draw 5000 samples from a normal distribution with
+mean .5, and standard deviation 1. If these draws were experiments, they'd be
+in a context where the true effect size was .5, but you only gathered enough data
+to get a standard error of 1.
+
+
+```{r}
+sim_plot(.5,1)
+```
+
+Here, the dotted line is the true effect size, and the full lines are where
+the statistic becomes statistically significant, given our standard error of 1.
+Thus, the greyed out points aren't statistically significant, the squares
+are type M errors, and the triangles are type S errors.
+
+Even though the full distribution is faithfully centered around the true effect,
+once we filter using statistical significance, we will both overestimate the effect
+and get its sign wrong.
+
+Of course, trying to find a true effect size of .5 with a standard error of 1
+is extremely underpowered. More precisely, the power, Type S and type M error here are:
+
+```{r}
+retro_design(.5,1)
+```
+
+A power of .07 simply isn't considered good research in most fields, so most cases
+won't be this severe. However, it does illustrate two important points.
+In a underpowered example like this, we will hugely overestimate our effect size,
+or even get its sign wrong if we're unlucky. Further, these are practical measures;
+getting the sign wrong could mean reccomending the wrong drug treatment, exaggerating
+the treatment effect could mean undertreating.
+
+
 ## A Severe Example
 
+Now that you hopefully have a sense of what type s/m error add to our understanding of
+NHST in the context of noisy, small sample studies, we'll move onto a real world
+example, where we'll focus on following Gelman and Carlin's suggested design
+analysis.
+
+We'll be working with [Kanazawa](https://www.ncbi.nlm.nih.gov/pubmed/16949101)
+(2007), which claimed that the most attractive people are more likely to have
+girls. To be more specific, each of their ~3,000 people surveyed had been
+assigned a "attractiveness" score from 1-5, and they then compared the first born
+children of the most attractive to other groups; 56% were girls compared to
+48% in the other groups. They thus obtained a difference estimate of 8%, with
+a p-value of .015, so significant at the traditional $\alpha = .05$.
+
+Stepping back for a second, this is fishy in numerous ways. First, comparing
+the first borne children is an oddly specific comparison to have run- at worst,
+this might be a case of p-hacking. At best, maybe they saw a strong comparison,
+and decided to test it, and in doing so fell into a [Garden of Forking Paths](http://www.stat.columbia.edu/~gelman/research/unpublished/p_hacking.pdf)
+problem. Second, if attractive people had many more girls, it seems unlikely
+that gender balance would be be as even as it is. So again, this example has a
+likely spurious result, likely to have low power and a high probability of s/m errors.
+
+To do a design analysis of this, Gelman and Carlin suggest reviewing the literature
+for a posited true effect size. There is plenty of prior research on variatio
+in sex ratio of human births. A huge variety of factors have been
+studied such as race, parental age, season of birth, and so on, only finding
+effects from .3 to 2 percentage points. In the most extreme cases (conditions
+like extreme poverty or famine), these effects only rise to 3%. 
+
+
 ## Assessing Type S/M errors when you don't have prior information
+
+One obvious objection you might have to this framework is that you may not
+have a clear sense of what your effect size will be. As extreme as it sounds,
+you may not even have a sense of the right order of magnitude. In these cases,
+it makes sense to calculate type s/m errors across a variety of posited effect
+sizes, and see how they influence your research.
+
+For example, let's explore the previous example, but posit a wider range
+of effect sizes. The first is what they used, and the last is what Gelman and
+Carlin think most likely based on a literature review of their field.
 
 ## So how worried should we be?
 
@@ -50,7 +156,17 @@ As [Lu et al.](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
 (2018) note, the type s and m error shrink at very different rates as power
 rises. 
 
-The probability of type S error decreases fast. To ensure that $s ≤ 0.1$
+The probability of type S error decreases rapidly. To ensure that $s ≤ 0.1$
 and $s ≤ 0.01$, we only need $power = 0.08$ and $power = 0.17$, respectively. Thus,
 unless your study is severely underpowered for your effect size, you shouldn't
 need to worry about type s errors very often.
+
+On the other hand, The type m error decreases relatively slowly. 
+To ensure that $m ≤ 1.5$ and $m ≤ 1.1$, we
+need $power = 0.52$ and $power = 0.85$, respectively. Whereas even moderately
+powered studies make type s errors relatively improbable, only very high powered
+studies keep exaggeration of effect sizes down. If your field requires a power
+of .80, you should thus be cognizant that effect sizes are likely somewhat
+inflated.
+
+For the majority of this article, I've avoided
