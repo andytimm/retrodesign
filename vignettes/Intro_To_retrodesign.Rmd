@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 ```{r, include=FALSE}
 library(retrodesign)
+library(ggplot2)
 ```
 
 In light of the replication and reproducibility crisis, researchers across
@@ -29,8 +30,8 @@ Gelman and Carlin's [Assessing Type S and Type M Errors](http://www.stat.columbi
  errors are insufficient to fully capture the risks of NHST analyses, in that
  such analysis focuses exessively on statistical significance. Instead,
  they argue for consideration of the probability you'll get the sign on your
- effect wrong, or type S error, and the factor by which the
-magnitude of your effect might be overestimated, or type M
+ effect wrong, or **type S error**, and the factor by which the
+magnitude of your effect might be overestimated, or **type M**
 error. Together, these additional statistics more fully explain the dangers of
 working in the NHST framework, especially in noisy, small sample environments.
 
@@ -60,7 +61,7 @@ If it helps, imagine the following in the context of one of those from your fiel
 
 Traditionally, we'd focus on Type I/II errors. Type I error is
 rejecting the null hypothesis, when it is true. Type II error is
- failing to reject the null hypothesis, when it is not true. The power, then
+ failing to reject the null hypothesis, when it is not true. The power, then,
  is just is the probability that the test correctly rejects the null hypothesis.
 
 Beyond those, we'll also consider:
@@ -76,7 +77,9 @@ significant; we'll come back to this fact several times.
 To visualize these, we'll draw 5000 samples from a normal distribution with
 mean .5, and standard deviation 1. If these draws were experiments, they'd be
 in a context where the true effect size was .5, but you only gathered enough data
-to get a standard error of 1.
+to get a standard error of 1. We can use `sim_plot()` to do so, with the first
+parameter being our postulated effect size .5, and the second being our
+hypothetical standard error of 1.
 
 
 ```{r}
@@ -84,8 +87,9 @@ sim_plot(.5,1)
 ```
 
 Here, the dotted line is the true effect size, and the full lines are where
-the statistic becomes statistically significant, given our standard error of 1.
-Thus, the greyed out points aren't statistically significant, the squares
+the statistic becomes statistically significantly different from 0,
+given our standard error of 1.
+The greyed out points aren't statistically significant, the squares
 are type M errors, and the triangles are type S errors.
 
 Even though the full distribution is faithfully centered around the true effect,
@@ -99,10 +103,18 @@ is extremely underpowered. More precisely, the power, Type S and type M error he
 retro_design(.5,1)
 ```
 
+The function arguements here the same as those for `sim_plot()` above.
+If you want to work with a t-distribution instead, you'll need to use 
+`retrodesign()` instead, and provide the degrees of freedom for the `df`
+arguement. `retrodesign()` is the original function provided by Gelman & Carlin,
+which uses simulation rather than an exact solution to calculate the errors. It's
+slower, but can work with t-distributions as well.
+
 A power of .07 simply isn't considered good research in most fields, so most cases
 won't be this severe. However, it does illustrate two important points.
 In a underpowered example like this, we will hugely overestimate our effect size,
-or even get its sign wrong if we're unlucky. Further, these are practical measures;
+or even get its sign wrong if we're unlucky. Further, these are practical measures to
+focus on;
 getting the sign wrong could mean reccomending the wrong drug treatment, exaggerating
 the treatment effect could mean undertreating.
 
@@ -115,7 +127,7 @@ example, where we'll focus on following Gelman and Carlin's suggested design
 analysis.
 
 We'll be working with [Kanazawa](https://www.ncbi.nlm.nih.gov/pubmed/16949101)
-(2007), which claimed that the most attractive people are more likely to have
+(2007), which argued that the most attractive people are more likely to have
 girls. To be more specific, each of their ~3,000 people surveyed had been
 assigned a "attractiveness" score from 1-5, and they then compared the first born
 children of the most attractive to other groups; 56% were girls compared to
@@ -154,7 +166,17 @@ Carlin think most likely based on a literature review of their field.
 
 As [Lu et al.](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
 (2018) note, the type s and m error shrink at very different rates as power
-rises. 
+rises.
+
+
+```{r}
+possible_effects <- seq(.1,3, by = .1)
+effect_s_pairs <- data.frame(possible_effects,type_s(possible_effects,3.3))
+effect_m_pairs <- data.frame(possible_effects,type_m(possible_effects,3.3))
+
+ggplot(effect_s_pairs, aes(possible_effects, type_s)) + geom_point()
+ggplot(effect_m_pairs, aes(possible_effects, type_m)) + geom_point()
+```
 
 The probability of type S error decreases rapidly. To ensure that $s ≤ 0.1$
 and $s ≤ 0.01$, we only need $power = 0.08$ and $power = 0.17$, respectively. Thus,
