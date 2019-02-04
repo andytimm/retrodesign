@@ -37,8 +37,8 @@ magnitude of your effect might be overestimated, or **type M**
 error. Together, these additional statistics more fully explain the dangers of
 working in the NHST framework, especially in noisy, small sample environments.
 
-**retrodesign** is a package designed to help researchers better understand type s
-and m errors, and their implications for their research. In this vingette, I
+**retrodesign** is a package designed to help researchers better understand type S
+and M errors, and their implications for their research. In this vingette, I
 introduce both the need for the type S/M error metrics, and the tools
 retrodesign provides for examining them. I assume only a basic familiarity with
 hypothesis testing, and provide definitional reminders along the way.
@@ -122,10 +122,10 @@ the treatment effect could mean undertreating someone.
 
 ## A Severe Example
 
-Now that you hopefully have a sense of what type s/m error add to our understanding of
+Now that you hopefully have a sense of what type S/M error add to our understanding of
 NHST in the context of noisy, small sample studies, we'll move onto a real world
 example, where we'll focus on following Gelman and Carlin's suggested design
-analysis.
+analysis through one of their examples.
 
 We'll be working with [Kanazawa](https://www.ncbi.nlm.nih.gov/pubmed/16949101)
 (2007), which claimed that the most attractive people are more likely to have
@@ -141,7 +141,7 @@ this might be a case of p-hacking. At best, maybe they saw a strong comparison,
 and decided to test it, and in doing so fell into a [Garden of Forking Paths](http://www.stat.columbia.edu/~gelman/research/unpublished/p_hacking.pdf)
 problem. Second, if attractive people had many more girls, it seems unlikely
 that gender balance would be be as even as it is. So again, this example has a
-likely spurious result, is likely to have low power, and a high probability of s/m errors.
+likely spurious result, is likely to have low power, and a high chance of S/M errors.
 
 To do a design analysis of this, Gelman and Carlin's first step is to review the literature
 for a posited true effect size. There is plenty of prior research on variation
@@ -149,7 +149,7 @@ in sex ratio of human births. A huge variety of factors have been
 studied such as race, parental age, season of birth, and so on, only finding
 effects from .3% to 2%. In the most extreme cases (conditions
 like extreme poverty or famine), these effects only rise to 3%. (If you're interested,
-the causal reasoning seems to be that male fetuses are more likely than female
+the causal reasoning seems to be that male fetuses are more likely than female ones
 to die under adverse conditions.)
 
 Like traditional design analyses, we'll posit a wide range of effects here, and
@@ -170,11 +170,11 @@ retro_design(list(.1,.3,1),3.3)
 retro_design(list(.1,.3,1,2,3),3.3)
 ```
 
-By providing a list for `A`, we get a dataframe with a posited effect size,
+By providing a list for our first arguement `A`, we get a dataframe with a posited effect size,
 and corresponding power, type S, and type M errors in each row. If you just want
-the lists of power/type s/type m, you can just feed in a vector, ie `c(.1,.3,1)`.
+the lists of power/type S/type M, you can just feed in a vector, ie `c(.1,.3,1)`.
 
-So if we go with a high but reasonable posited effect of 1%, there's a nearly
+So if we go with a high but fairly reasonable posited effect of 1%, there's a nearly
 1 in 5 chance that such an experiment would get the direction of the effect wrong.
 Even if we assume that being the daughter of a highly attractive person has
 equivalent effect to being born in a famine (effect size 3%), this experiment would
@@ -183,7 +183,7 @@ exaggerate the true effect size by a factor of 2.7x on average.
 This analysis has given us added information beyond what we'd get from the point
 estimate, the confidence interval, and the p-value. Under reasonable assumptions
 about the true effect size, this study simply seems to small to be informative: Under
-most assumptions, we're quite likely to get the sign wrong, and even with a generous
+most assumptions, we're quite likely to get the sign wrong, and even with a quite generous
 assumption of true effect size we'll greatly exaggerate the effect size.
 
 ## Assessing Type S/M errors when you don't have prior information
@@ -198,15 +198,15 @@ sizes, and see how they influence your research.
 
 Another concern might be that my first two examples were severely underpowered.
 However, even with powers that are publishable in many fields, we should still
-be worried about type m errors, but not type s errors.
+be worried about type M errors, but not type S errors.
 
 As [Lu et al.](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
-(2018) note, the type s and m error shrink at very different rates as power
+(2018) note, the type S and M error shrink at very different rates as power
 rises. 
 
 To sketch out the relationship between possible effect sizes and these errors,
 we adopt the standard error from the prior example, but greatly expand
-the posited effect sizes, to include max out at 10, where the power would be
+the posited effect sizes, to max out at 10, where the power would be
 a perfectly reasonable .85. We'll use `type_s` and `type_m`, both of which
 take a single or list of possible `A`'s, and a standard error, similar to 
 `retrodesign`, but only return the respective error.
@@ -256,10 +256,10 @@ implicit in a NHST environment, where an arbitrary p-value (usually .05) decides
 what is and isn't noteworthy.
 
 If you have to work in the NHST because it's what your discipline publishes, you
-can better understand some problems it might cause by exploring type s and m errors.
+can better understand some problems it might cause by exploring type S and M errors.
 If you're able to choose how you analyze your experiments though, you can avoid
-these errors (and many others) fairly easily by abandoning statistical significance as a hard filter entirely.
-If learning more about problems with NHST beyond type s and m errors, and
+these errors (and many others) by abandoning statistical significance as a hard filter entirely.
+If learning more about problems with NHST beyond type S and M errors, and
 suggestions for alternative strategies is interesting to you, check out the
 **Abandon Statistical Significance** paper linked in the further reading below.
 
@@ -280,5 +280,6 @@ Jiannan Lu  Yixuan Qiu  Alex Deng](https://onlinelibrary.wiley.com/doi/full/10.1
 (2018)**: Lu and coauthors go further into the mathamatical properties of Type S/M errors, and prove the closed form solutions implimented in `retrodesign`. 
 4. **McShane et al's [Abandon Statistical Significance](https://arxiv.org/abs/1709.07588) (2017)**: If you
 want a starting point on the challenges with NHST that have led many statisticians
-to argue for abandoning NHST all together.
+to argue for abandoning NHST all together, and starting points for alternative
+ways of doing science.
 
