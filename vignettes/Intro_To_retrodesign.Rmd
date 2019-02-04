@@ -1,5 +1,5 @@
 ---
-title: "An Introduction to Type S and M errors in Hypothosis Testing"
+title: "An Introduction to Type S and M errors in Hypothesis Testing"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
@@ -23,14 +23,14 @@ library(gridExtra)
 ```
 
 In light of the replication and reproducibility crisis, researchers across
-many fields have been rexamining their relationship with the Null Hypthosis
+many fields have been reexamining their relationship with the Null Hypothesis
 Significance Testing (NHST) framework,
 and developing tools to more fully understand the implications of their research
 designs for replicable and reproducible science. One major paper in this vein is
 Gelman and Carlin's [Assessing Type S and Type M Errors](http://www.stat.columbia.edu/~gelman/research/published/retropower20.pdf)
  (2014), which argues that looking at power, type I errors, and type II
  errors are insufficient to fully capture the risks of NHST analyses, in that
- such analysis focuses exessively on statistical significance. Instead,
+ such analysis focuses excessively on statistical significance. Instead,
  they argue for consideration of the probability you'll get the sign on your
  effect wrong, or **type S error**, and the factor by which the
 magnitude of your effect might be overestimated, or **type M**
@@ -38,7 +38,7 @@ error. Together, these additional statistics more fully explain the dangers of
 working in the NHST framework, especially in noisy, small sample environments.
 
 **retrodesign** is a package designed to help researchers better understand type S
-and M errors, and their implications for their research. In this vingette, I
+and M errors, and their implications for their research. In this vignette, I
 introduce both the need for the type S/M error metrics, and the tools
 retrodesign provides for examining them. I assume only a basic familiarity with
 hypothesis testing, and provide definitional reminders along the way.
@@ -104,10 +104,10 @@ is extremely underpowered. More precisely, the power, Type S and type M error he
 retro_design(.5,1)
 ```
 
-The function arguements here the same as those for `sim_plot()` above.
+The function arguments here the same as those for `sim_plot()` above.
 If you want to work with a t-distribution instead, you'll need to use 
 `retrodesign()` instead, and provide the degrees of freedom for the `df`
-arguement. `retrodesign()` is the original function provided by Gelman & Carlin (2014),
+argument. `retrodesign()` is the original function provided by Gelman & Carlin (2014),
 which uses simulation rather than an exact solution to calculate the errors. It's thus
 slower, but can work with t-distributions as well.
 
@@ -116,7 +116,7 @@ won't be this severe. However, it does illustrate two important points.
 In a underpowered example like this, we will hugely overestimate our effect size (by a factor of 4.7x! on average),
 or even get its sign wrong if we're unlucky (around 8% of the time). Further, these are practical measures to
 focus on;
-getting the sign wrong could mean reccomending the wrong drug treatment, exaggerating
+getting the sign wrong could mean recommending the wrong drug treatment, exaggerating
 the treatment effect could mean undertreating someone.
 
 
@@ -140,7 +140,7 @@ the first borne children is an oddly specific comparison to have run- at worst,
 this might be a case of p-hacking. At best, maybe they saw a strong comparison,
 and decided to test it, and in doing so fell into a [Garden of Forking Paths](http://www.stat.columbia.edu/~gelman/research/unpublished/p_hacking.pdf)
 problem. Second, if attractive people had many more girls, it seems unlikely
-that gender balance would be be as even as it is. So again, this example has a
+that gender balance would be as even as it is. So again, this example has a
 likely spurious result, is likely to have low power, and a high chance of S/M errors.
 
 To do a design analysis of this, Gelman and Carlin's first step is to review the literature
@@ -170,7 +170,7 @@ retro_design(list(.1,.3,1),3.3)
 retro_design(list(.1,.3,1,2,3),3.3)
 ```
 
-By providing a list for our first arguement `A`, we get a dataframe with a posited effect size,
+By providing a list for our first argument `A`, we get a dataframe with a posited effect size,
 and corresponding power, type S, and type M errors in each row. If you just want
 the lists of power/type S/type M, you can just feed in a vector, ie `c(.1,.3,1)`.
 
@@ -192,7 +192,7 @@ One obvious objection you might have to this framework is that you may not
 have a clear sense of what your effect size will be. As extreme as it sounds,
 you may not even have a sense of the right order of magnitude. In these cases,
 it makes even more sense to calculate type s/m errors across a variety of posited effect
-sizes, and see how they influence your research.
+sizes and see how they influence your research.
 
 ## So how worried should we be in more reasonable studies?
 
@@ -238,7 +238,7 @@ inflated.
 
 ## Solutions outside NHST
 
-For the majority of this vingette, I've avoided questioning whether we should
+For the majority of this vignette, I've avoided questioning whether we should
 be working in the NHST framework. However, `retrodesign` is a package to help
 address some limitations of NHST work as it's traditionally practiced, so it
 makes sense to address these solutions 
@@ -251,7 +251,7 @@ sim_plot(.5,1)
 ```
 
 
-Type S and M errors are an artifact of the hard threshholding
+Type S and M errors are an artifact of the hard thresholding
 implicit in a NHST environment, where an arbitrary p-value (usually .05) decides
 what is and isn't noteworthy.
 
@@ -269,7 +269,7 @@ suggestions for alternative strategies is interesting to you, check out the
 Papers on Type S/Type M Errors:
 
 1. **Gelman and Tuerlinckx's [Type S error rates for classical and Bayesian single and multiple comparisons
-procedures](http://www.stat.columbia.edu/~gelman/research/published/francis8.pdf) (2000)**: A comparison of the properties of Type S errors of frequentist and bayesian confidence statements. Useful for how this all plays out in a bayesian context. Bayesian confidence statements have the desirable property of being more conservative than frequentist ones.
+procedures](http://www.stat.columbia.edu/~gelman/research/published/francis8.pdf) (2000)**: A comparison of the properties of Type S errors of frequentist and Bayesian confidence statements. Useful for how this all plays out in a Bayesian context. Bayesian confidence statements have the desirable property of being more conservative than frequentist ones.
 2. **Gelman and Carlin's [Assessing Type S and Type M Errors](http://www.stat.columbia.edu/~gelman/research/published/retropower20.pdf)
  (2014)**: Gelman and Carlin compare their suggested design analysis, as we've written about above
  to more traditional design analysis, through several examples, and discuss the
@@ -277,7 +277,7 @@ procedures](http://www.stat.columbia.edu/~gelman/research/published/francis8.pdf
  retrodesign() function, which I re-use in the package with permission.
 3. **Lu et al's [A note on Type S/M errors in hypothesis testing
 Jiannan Lu  Yixuan Qiu  Alex Deng](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
-(2018)**: Lu and coauthors go further into the mathamatical properties of Type S/M errors, and prove the closed form solutions implimented in `retrodesign`. 
+(2018)**: Lu and coauthors go further into the mathematical properties of Type S/M errors, and prove the closed form solutions implimented in `retrodesign`. 
 4. **McShane et al's [Abandon Statistical Significance](https://arxiv.org/abs/1709.07588) (2017)**: If you
 want a starting point on the challenges with NHST that have led many statisticians
 to argue for abandoning NHST all together, and starting points for alternative
