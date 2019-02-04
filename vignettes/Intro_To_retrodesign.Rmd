@@ -18,6 +18,8 @@ knitr::opts_chunk$set(
 ```{r, include=FALSE}
 library(retrodesign)
 library(ggplot2)
+library(grid)
+library(gridExtra)
 ```
 
 In light of the replication and reproducibility crisis, researchers across
@@ -109,9 +111,9 @@ arguement. `retrodesign()` is the original function provided by Gelman & Carlin 
 which uses simulation rather than an exact solution to calculate the errors. It's thus
 slower, but can work with t-distributions as well.
 
-A power of .07 simply isn't considered good research in most fields, so most cases
+A power of .07 isn't considered good research in most fields, so most cases
 won't be this severe. However, it does illustrate two important points.
-In a underpowered example like this, we will hugely overestimate our effect size (by a factor of 4.7x!),
+In a underpowered example like this, we will hugely overestimate our effect size (by a factor of 4.7x! on average),
 or even get its sign wrong if we're unlucky (around 8% of the time). Further, these are practical measures to
 focus on;
 getting the sign wrong could mean reccomending the wrong drug treatment, exaggerating
@@ -126,7 +128,7 @@ example, where we'll focus on following Gelman and Carlin's suggested design
 analysis.
 
 We'll be working with [Kanazawa](https://www.ncbi.nlm.nih.gov/pubmed/16949101)
-(2007), which argued that the most attractive people are more likely to have
+(2007), which claimed that the most attractive people are more likely to have
 girls. To be more specific, each of their ~3,000 people surveyed had been
 assigned a "attractiveness" score from 1-5, and they then compared the first born
 children of the most attractive to other groups; 56% were girls compared to
@@ -145,7 +147,7 @@ To do a design analysis of this, Gelman and Carlin's first step is to review the
 for a posited true effect size. There is plenty of prior research on variation
 in sex ratio of human births. A huge variety of factors have been
 studied such as race, parental age, season of birth, and so on, only finding
-effects from .3 to 2 percentage points. In the most extreme cases (conditions
+effects from .3% to 2%. In the most extreme cases (conditions
 like extreme poverty or famine), these effects only rise to 3%. (If you're interested,
 the causal reasoning seems to be that male fetuses are more likely than female
 to die under adverse conditions.)
@@ -168,40 +170,63 @@ retro_design(list(.1,.3,1),3.3)
 retro_design(list(.1,.3,1,2,3),3.3)
 ```
 
+By providing a list for `A`, we get a dataframe with a posited effect size,
+and corresponding power, type S, and type M errors in each row. If you just want
+the lists of power/type s/type m, you can just feed in a vector, ie `c(.1,.3,1)`.
 
+So if we go with a high but reasonable posited effect of 1%, there's a nearly
+1 in 5 chance that such an experiment would get the direction of the effect wrong.
+Even if we assume that being the daughter of a highly attractive person has
+equivalent effect to being born in a famine (effect size 3%), this experiment would
+exaggerate the true effect size by a factor of 2.7x on average.
+
+This analysis has given us added information beyond what we'd get from the point
+estimate, the confidence interval, and the p-value. Under reasonable assumptions
+about the true effect size, this study simply seems to small to be informative: Under
+most assumptions, we're quite likely to get the sign wrong, and even with a generous
+assumption of true effect size we'll greatly exaggerate the effect size.
 
 ## Assessing Type S/M errors when you don't have prior information
 
 One obvious objection you might have to this framework is that you may not
 have a clear sense of what your effect size will be. As extreme as it sounds,
 you may not even have a sense of the right order of magnitude. In these cases,
-it makes sense to calculate type s/m errors across a variety of posited effect
+it makes even more sense to calculate type s/m errors across a variety of posited effect
 sizes, and see how they influence your research.
 
-For example, let's explore the previous example, but posit a wider range
-of effect sizes. The first is what they used, and the last is what Gelman and
-Carlin think most likely based on a literature review of their field.
+## So how worried should we be in more reasonable studies?
 
-## So how worried should we be?
+Another concern might be that my first two examples were severely underpowered.
+However, even with powers that are publishable in many fields, we should still
+be worried about type m errors, but not type s errors.
 
 As [Lu et al.](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
 (2018) note, the type s and m error shrink at very different rates as power
-rises.
+rises. 
 
+To sketch out the relationship between possible effect sizes and these errors,
+we adopt the standard error from the prior example, but greatly expand
+the posited effect sizes, to include max out at 10, where the power would be
+a perfectly reasonable .85. We'll use `type_s` and `type_m`, both of which
+take a single or list of possible `A`'s, and a standard error, similar to 
+`retrodesign`, but only return the respective error.
 
 ```{r}
-possible_effects <- seq(.1,3, by = .1)
+possible_effects <- seq(.1,10, by = .5)
 effect_s_pairs <- data.frame(possible_effects,type_s(possible_effects,3.3))
 effect_m_pairs <- data.frame(possible_effects,type_m(possible_effects,3.3))
 
-ggplot(effect_s_pairs, aes(possible_effects, type_s)) + geom_point()
-ggplot(effect_m_pairs, aes(possible_effects, type_m)) + geom_point()
+type_s_plot <- ggplot(effect_s_pairs, aes(possible_effects, type_s)) + geom_point()
+type_m_plot <- ggplot(effect_m_pairs, aes(possible_effects, type_m)) + geom_point()
+
+grid.arrange(type_s_plot, type_m_plot, ncol = 2)
 ```
 
 The probability of type S error decreases rapidly. To ensure that $s ≤ 0.1$
 and $s ≤ 0.01$, we only need $power = 0.08$ and $power = 0.17$, respectively. Thus,
-unless your study is severely underpowered for your effect size, you shouldn't
-need to worry about type s errors very often.
+unless your study is severely underpowered, you shouldn't
+need to worry about type s errors very often unless your power calculations
+are based on faulty assumptions.
 
 On the other hand, The type m error decreases relatively slowly. 
 To ensure that $m ≤ 1.5$ and $m ≤ 1.1$, we
@@ -211,4 +236,8 @@ studies keep exaggeration of effect sizes down. If your field requires a power
 of .80, you should thus be cognizant that effect sizes are likely somewhat
 inflated.
 
-For the majority of this article, I've avoided
+## 
+
+For the majority of this vingette, I've avoided 
+
+## Further Reading
