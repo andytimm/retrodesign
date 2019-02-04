@@ -29,5 +29,6 @@ RoxygenNote: 6.0.1
 Imports: graphics
 Suggests: ggplot2,
     knitr,
-    rmarkdown
+    rmarkdown,
+    gridExtra
 VignetteBuilder: knitr

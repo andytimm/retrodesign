@@ -9,7 +9,7 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
+    collapse = TRUE,
   comment = "#>"
 )
 
@@ -46,7 +46,7 @@ hypothesis testing, and provide definitional reminders along the way.
 ## An Initial Example
 
 To nail down the assumptions we're working with, we'll start with an abstract
-example; the second and third will draw on a real world scenario and follow
+example; the second will draw on a real world scenario and follow
 Gelman and Carlin's suggested workflow for design analysis more closely.
 
 Let's say we're testing whether a true effect size is zero or not, in a two
@@ -95,7 +95,7 @@ are type M errors, and the triangles are type S errors.
 
 Even though the full distribution is faithfully centered around the true effect,
 once we filter using statistical significance, we will both overestimate the effect
-and get its sign wrong.
+and get its sign wrong often.
 
 Of course, trying to find a true effect size of .5 with a standard error of 1
 is extremely underpowered. More precisely, the power, Type S and type M error here are:
@@ -211,15 +211,15 @@ a perfectly reasonable .85. We'll use `type_s` and `type_m`, both of which
 take a single or list of possible `A`'s, and a standard error, similar to 
 `retrodesign`, but only return the respective error.
 
-```{r}
+```{r,fig.width=6}
 possible_effects <- seq(.1,10, by = .5)
 effect_s_pairs <- data.frame(possible_effects,type_s(possible_effects,3.3))
 effect_m_pairs <- data.frame(possible_effects,type_m(possible_effects,3.3))
 
-type_s_plot <- ggplot(effect_s_pairs, aes(possible_effects, type_s)) + geom_point()
-type_m_plot <- ggplot(effect_m_pairs, aes(possible_effects, type_m)) + geom_point()
+s_plot<- ggplot(effect_s_pairs, aes(possible_effects, type_s)) + geom_point()
+m_plot <- ggplot(effect_m_pairs, aes(possible_effects, type_m)) + geom_point()
 
-grid.arrange(type_s_plot, type_m_plot, ncol = 2)
+grid.arrange(s_plot, m_plot, ncol=2)
 ```
 
 The probability of type S error decreases rapidly. To ensure that $s ≤ 0.1$
@@ -236,8 +236,49 @@ studies keep exaggeration of effect sizes down. If your field requires a power
 of .80, you should thus be cognizant that effect sizes are likely somewhat
 inflated.
 
-## 
+## Solutions outside NHST
 
-For the majority of this vingette, I've avoided 
+For the majority of this vingette, I've avoided questioning whether we should
+be working in the NHST framework. However, `retrodesign` is a package to help
+address some limitations of NHST work as it's traditionally practiced, so it
+makes sense to address these solutions 
+
+Going back to the plot we started with, remember that the underlying gaussian
+does actually faithfully center around it's mean of .5.
+
+```{r}
+sim_plot(.5,1)
+```
+
+
+Type S and M errors are an artifact of the hard threshholding
+implicit in a NHST environment, where an arbitrary p-value (usually .05) decides
+what is and isn't noteworthy.
+
+If you have to work in the NHST because it's what your discipline publishes, you
+can better understand some problems it might cause by exploring type s and m errors.
+If you're able to choose how you analyze your experiments though, you can avoid
+these errors (and many others) fairly easily by abandoning statistical significance as a hard filter entirely.
+If learning more about problems with NHST beyond type s and m errors, and
+suggestions for alternative strategies is interesting to you, check out the
+**Abandon Statistical Significance** paper linked in the further reading below.
+
 
 ## Further Reading
+
+Papers on Type S/Type M Errors:
+
+1. **Gelman and Tuerlinckx's [Type S error rates for classical and Bayesian single and multiple comparisons
+procedures](http://www.stat.columbia.edu/~gelman/research/published/francis8.pdf) (2000)**: A comparison of the properties of Type S errors of frequentist and bayesian confidence statements. Useful for how this all plays out in a bayesian context. Bayesian confidence statements have the desirable property of being more conservative than frequentist ones.
+2. **Gelman and Carlin's [Assessing Type S and Type M Errors](http://www.stat.columbia.edu/~gelman/research/published/retropower20.pdf)
+ (2014)**: Gelman and Carlin compare their suggested design analysis, as we've written about above
+ to more traditional design analysis, through several examples, and discuss the
+ desirable properties it has in more depth than I do here. It is also the source of the original
+ retrodesign() function, which I re-use in the package with permission.
+3. **Lu et al's [A note on Type S/M errors in hypothesis testing
+Jiannan Lu  Yixuan Qiu  Alex Deng](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
+(2018)**: Lu and coauthors go further into the mathamatical properties of Type S/M errors, and prove the closed form solutions implimented in `retrodesign`. 
+4. **McShane et al's [Abandon Statistical Significance](https://arxiv.org/abs/1709.07588) (2017)**: If you
+want a starting point on the challenges with NHST that have led many statisticians
+to argue for abandoning NHST all together.
+
