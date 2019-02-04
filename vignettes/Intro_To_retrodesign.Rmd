@@ -75,9 +75,8 @@ Notice that both of these are conditional on the test statistic being statistica
 significant; we'll come back to this fact several times.
 
 To visualize these, we'll draw 5000 samples from a normal distribution with
-mean .5, and standard deviation 1. If these draws were experiments, they'd be
-in a context where the true effect size was .5, but you only gathered enough data
-to get a standard error of 1. We can use `sim_plot()` to do so, with the first
+mean .5, and standard deviation 1. We'll then analyze these in a NHST setting
+where we get a standard error of 1. We can use `sim_plot()` to do so, with the first
 parameter being our postulated effect size .5, and the second being our
 hypothetical standard error of 1.
 
@@ -106,17 +105,17 @@ retro_design(.5,1)
 The function arguements here the same as those for `sim_plot()` above.
 If you want to work with a t-distribution instead, you'll need to use 
 `retrodesign()` instead, and provide the degrees of freedom for the `df`
-arguement. `retrodesign()` is the original function provided by Gelman & Carlin,
-which uses simulation rather than an exact solution to calculate the errors. It's
+arguement. `retrodesign()` is the original function provided by Gelman & Carlin (2014),
+which uses simulation rather than an exact solution to calculate the errors. It's thus
 slower, but can work with t-distributions as well.
 
 A power of .07 simply isn't considered good research in most fields, so most cases
 won't be this severe. However, it does illustrate two important points.
-In a underpowered example like this, we will hugely overestimate our effect size,
-or even get its sign wrong if we're unlucky. Further, these are practical measures to
+In a underpowered example like this, we will hugely overestimate our effect size (by a factor of 4.7x!),
+or even get its sign wrong if we're unlucky (around 8% of the time). Further, these are practical measures to
 focus on;
 getting the sign wrong could mean reccomending the wrong drug treatment, exaggerating
-the treatment effect could mean undertreating.
+the treatment effect could mean undertreating someone.
 
 
 ## A Severe Example
@@ -140,14 +139,35 @@ this might be a case of p-hacking. At best, maybe they saw a strong comparison,
 and decided to test it, and in doing so fell into a [Garden of Forking Paths](http://www.stat.columbia.edu/~gelman/research/unpublished/p_hacking.pdf)
 problem. Second, if attractive people had many more girls, it seems unlikely
 that gender balance would be be as even as it is. So again, this example has a
-likely spurious result, likely to have low power and a high probability of s/m errors.
+likely spurious result, is likely to have low power, and a high probability of s/m errors.
 
-To do a design analysis of this, Gelman and Carlin suggest reviewing the literature
-for a posited true effect size. There is plenty of prior research on variatio
+To do a design analysis of this, Gelman and Carlin's first step is to review the literature
+for a posited true effect size. There is plenty of prior research on variation
 in sex ratio of human births. A huge variety of factors have been
 studied such as race, parental age, season of birth, and so on, only finding
 effects from .3 to 2 percentage points. In the most extreme cases (conditions
-like extreme poverty or famine), these effects only rise to 3%. 
+like extreme poverty or famine), these effects only rise to 3%. (If you're interested,
+the causal reasoning seems to be that male fetuses are more likely than female
+to die under adverse conditions.)
+
+Like traditional design analyses, we'll posit a wide range of effects here, and
+see how our power, type S error, and type M error rates change correspondingly.
+Gelman and Carlin end up looking at .1-1, reasoning that the sex ratios vary
+very little in general, and that the subject attractiveness rating is quite
+noisy as well. Even if we compare their effect size to the effect sizes found
+in the most extreme scenarios in prior literature, it doesn't look good.
+
+We can infer their standard error of the difference to be 3.3% from their reported
+8% estimate and p-value of .015; we now have everything we need.
+
+```{r}
+# The posited effects Gelman and Carlin consider
+retro_design(list(.1,.3,1),3.3)
+
+# A particularly charitable set of posited effects
+retro_design(list(.1,.3,1,2,3),3.3)
+```
+
 
 
 ## Assessing Type S/M errors when you don't have prior information
