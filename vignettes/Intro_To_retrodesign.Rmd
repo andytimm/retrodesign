@@ -26,9 +26,9 @@ In light of the replication and reproducibility crisis, researchers across
 many fields have been reexamining their relationship with the Null Hypothesis
 Significance Testing (NHST) framework,
 and developing tools to more fully understand the implications of their research
-designs for replicable and reproducible science. One major paper in this vein is
-Gelman and Carlin's [Assessing Type S and Type M Errors](http://www.stat.columbia.edu/~gelman/research/published/retropower20.pdf)
- (2014), which argues that looking at power, type I errors, and type II
+designs for replicable and reproducible science. One group of papers in this vein are works by
+Andrew Gelman, John Carlin, Francis Tuerlinckx, and others which develop two new metrics for better understanding hypothesis testing in noisy samples. For example, Gelman and Carlin's [Assessing Type S and Type M Errors](http://www.stat.columbia.edu/~gelman/research/published/retropower20.pdf)
+ (2014) argues that looking at power, type I errors, and type II
  errors are insufficient to fully capture the risks of NHST analyses, in that
  such analysis focuses excessively on statistical significance. Instead,
  they argue for consideration of the probability you'll get the sign on your
@@ -38,7 +38,7 @@ error. Together, these additional statistics more fully explain the dangers of
 working in the NHST framework, especially in noisy, small sample environments.
 
 **retrodesign** is a package designed to help researchers better understand type S
-and M errors, and their implications for their research. In this vignette, I
+and M errors and their implications for their research. In this vignette, I
 introduce both the need for the type S/M error metrics, and the tools
 retrodesign provides for examining them. I assume only a basic familiarity with
 hypothesis testing, and provide definitional reminders along the way.
@@ -61,26 +61,28 @@ Limit Theorem, it applies to common settings like differences between test and c
 groups in a randomized experiment, averages, or linear regression coefficients.
 If it helps, imagine the following in the context of one of those from your field.
 
-Traditionally, we'd focus on Type I/II errors. Type I error is
-rejecting the null hypothesis, when it is true. Type II error is
- failing to reject the null hypothesis, when it is not true. The power, then,
- is just is the probability that the test correctly rejects the null hypothesis.
+Traditionally, we'd focus on Type I/II errors. **Type I error** is
+rejecting the null hypothesis, when it is true. **Type II error** is
+ failing to reject the null hypothesis, when it is not true. The **power**, then,
+ is just is the probability that the test correctly rejects the null hypothesis
+ when a specific alternative hypothesis is true.
 
 Beyond those, we'll also consider:
 
-1. **Type S (sign)**: the test statistic is in the opposite direction of the effect size, given that
-it is statistically significant;
-2. **Type M (magnitude)**: the test statistic in magnitude exaggerates the effect size, given
-that it is statistically significant.
+1. **Type S (sign)**: the test statistic is in the opposite direction of the true effect size, given that
+the statistic is statistically significant;
+2. **Type M (magnitude or exaggeration ratio)**: the test statistic in magnitude exaggerates the true effect size, given
+that the statistic is statistically significant.
 
 Notice that both of these are conditional on the test statistic being statistically
 significant; we'll come back to this fact several times.
 
 To visualize these, we'll draw 5000 samples from a normal distribution with
 mean .5, and standard deviation 1. We'll then analyze these in a NHST setting
-where we get a standard error of 1. We can use `sim_plot()` to do so, with the first
+where we have a standard error of 1. We can use `sim_plot()` to do so, with the first
 parameter being our postulated effect size .5, and the second being our
-hypothetical standard error of 1.
+hypothetical standard error of 1. If you prefer to not use ggplot graphics like I do
+here, set the `gg` argument to FALSE.
 
 
 ```{r}
@@ -94,7 +96,7 @@ The greyed out points aren't statistically significant, the squares
 are type M errors, and the triangles are type S errors.
 
 Even though the full distribution is faithfully centered around the true effect,
-once we filter using statistical significance, we will both overestimate the effect
+once we filter using statistical significance, we will both exaggerate the effect
 and get its sign wrong often.
 
 Of course, trying to find a true effect size of .5 with a standard error of 1
@@ -109,7 +111,8 @@ If you want to work with a t-distribution instead, you'll need to use
 `retrodesign()` instead, and provide the degrees of freedom for the `df`
 argument. `retrodesign()` is the original function provided by Gelman & Carlin (2014),
 which uses simulation rather than an exact solution to calculate the errors. It's thus
-slower, but can work with t-distributions as well.
+slower, but can work with t-distributions as well (the closed form solution
+only applies in the normal case).
 
 A power of .07 isn't considered good research in most fields, so most cases
 won't be this severe. However, it does illustrate two important points.
@@ -117,7 +120,7 @@ In a underpowered example like this, we will hugely overestimate our effect size
 or even get its sign wrong if we're unlucky (around 8% of the time). Further, these are practical measures to
 focus on;
 getting the sign wrong could mean recommending the wrong drug treatment, exaggerating
-the treatment effect could mean undertreating someone.
+the treatment effect could mean undertreating someone once the drug goes to market.
 
 
 ## A Severe Example
@@ -128,7 +131,7 @@ example, where we'll focus on following Gelman and Carlin's suggested design
 analysis through one of their examples.
 
 We'll be working with [Kanazawa](https://www.ncbi.nlm.nih.gov/pubmed/16949101)
-(2007), which claimed that the most attractive people are more likely to have
+(2007), which claims to have found that the most attractive people are more likely to have
 girls. To be more specific, each of their ~3,000 people surveyed had been
 assigned a "attractiveness" score from 1-5, and they then compared the first born
 children of the most attractive to other groups; 56% were girls compared to
@@ -154,7 +157,7 @@ to die under adverse conditions.)
 
 Like traditional design analyses, we'll posit a wide range of effects here, and
 see how our power, type S error, and type M error rates change correspondingly.
-Gelman and Carlin end up looking at .1-1, reasoning that the sex ratios vary
+Gelman and Carlin end up looking at .1-1%, reasoning that sex ratios vary
 very little in general, and that the subject attractiveness rating is quite
 noisy as well. Even if we compare their effect size to the effect sizes found
 in the most extreme scenarios in prior literature, it doesn't look good.
@@ -182,7 +185,7 @@ exaggerate the true effect size by a factor of 2.7x on average.
 
 This analysis has given us added information beyond what we'd get from the point
 estimate, the confidence interval, and the p-value. Under reasonable assumptions
-about the true effect size, this study simply seems to small to be informative: Under
+about the true effect size, this study simply seems too small to be informative: Under
 most assumptions, we're quite likely to get the sign wrong, and even with a quite generous
 assumption of true effect size we'll greatly exaggerate the effect size.
 
@@ -225,8 +228,7 @@ grid.arrange(s_plot, m_plot, ncol=2)
 The probability of type S error decreases rapidly. To ensure that $s ≤ 0.1$
 and $s ≤ 0.01$, we only need $power = 0.08$ and $power = 0.17$, respectively. Thus,
 unless your study is severely underpowered, you shouldn't
-need to worry about type s errors very often unless your power calculations
-are based on faulty assumptions.
+need to worry about type s errors very often.
 
 On the other hand, The type m error decreases relatively slowly. 
 To ensure that $m ≤ 1.5$ and $m ≤ 1.1$, we
@@ -241,7 +243,7 @@ inflated.
 For the majority of this vignette, I've avoided questioning whether we should
 be working in the NHST framework. However, `retrodesign` is a package to help
 address some limitations of NHST work as it's traditionally practiced, so it
-makes sense to address these solutions 
+makes sense to address these solutions.
 
 Going back to the plot we started with, remember that the underlying gaussian
 does actually faithfully center around it's mean of .5.
@@ -266,17 +268,14 @@ suggestions for alternative strategies is interesting to you, check out the
 
 ## Further Reading
 
-Papers on Type S/Type M Errors:
-
 1. **Gelman and Tuerlinckx's [Type S error rates for classical and Bayesian single and multiple comparisons
 procedures](http://www.stat.columbia.edu/~gelman/research/published/francis8.pdf) (2000)**: A comparison of the properties of Type S errors of frequentist and Bayesian confidence statements. Useful for how this all plays out in a Bayesian context. Bayesian confidence statements have the desirable property of being more conservative than frequentist ones.
 2. **Gelman and Carlin's [Assessing Type S and Type M Errors](http://www.stat.columbia.edu/~gelman/research/published/retropower20.pdf)
- (2014)**: Gelman and Carlin compare their suggested design analysis, as we've written about above
+ (2014)**: Gelman and Carlin compare their suggested design analysis, as we've written about above,
  to more traditional design analysis, through several examples, and discuss the
  desirable properties it has in more depth than I do here. It is also the source of the original
  retrodesign() function, which I re-use in the package with permission.
-3. **Lu et al's [A note on Type S/M errors in hypothesis testing
-Jiannan Lu  Yixuan Qiu  Alex Deng](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
+3. **Lu et al's [A note on Type S/M errors in hypothesis testing](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
 (2018)**: Lu and coauthors go further into the mathematical properties of Type S/M errors, and prove the closed form solutions implimented in `retrodesign`. 
 4. **McShane et al's [Abandon Statistical Significance](https://arxiv.org/abs/1709.07588) (2017)**: If you
 want a starting point on the challenges with NHST that have led many statisticians
