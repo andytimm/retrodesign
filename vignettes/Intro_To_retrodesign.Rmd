@@ -1,5 +1,6 @@
 ---
 title: "An Introduction to Type S and M errors in Hypothesis Testing"
+author: Andrew Timm
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
@@ -46,7 +47,8 @@ hypothesis testing, and provide definitional reminders along the way.
 ## An Initial Example
 
 To nail down the assumptions we're working with, we'll start with an abstract
-example; the second will draw on a real world scenario and follow
+example from [Lu et al.](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
+(2018); the second will draw on a real world scenario and follow
 Gelman and Carlin's suggested workflow for design analysis more closely.
 
 Let's say we're testing whether a true effect size is zero or not, in a two
@@ -140,7 +142,7 @@ a p-value of .015, so significant at the traditional $\alpha = .05$.
 
 Stepping back for a second, this is fishy in numerous ways. First, comparing
 the first borne children is an oddly specific comparison to have run- at worst,
-this might be a case of p-hacking. At best, maybe they saw a strong comparison,
+this might be a case of p-hacking. Or maybe they saw a strong comparison,
 and decided to test it, and in doing so fell into a [Garden of Forking Paths](http://www.stat.columbia.edu/~gelman/research/unpublished/p_hacking.pdf)
 problem. Second, if attractive people had many more girls, it seems unlikely
 that gender balance would be as even as it is. So again, this example has a
@@ -203,10 +205,6 @@ Another concern might be that my first two examples were severely underpowered.
 However, even with powers that are publishable in many fields, we should still
 be worried about type M errors, but not type S errors.
 
-As [Lu et al.](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
-(2018) note, the type S and M error shrink at very different rates as power
-rises. 
-
 To sketch out the relationship between possible effect sizes and these errors,
 we adopt the standard error from the prior example, but greatly expand
 the posited effect sizes, to max out at 10, where the power would be
@@ -225,7 +223,11 @@ m_plot <- ggplot(effect_m_pairs, aes(possible_effects, type_m)) + geom_point()
 grid.arrange(s_plot, m_plot, ncol=2)
 ```
 
-The probability of type S error decreases rapidly. To ensure that $s ≤ 0.1$
+As [Lu et al.](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
+(2018) note, the type S and M error shrink at very different rates as power
+rises.
+
+They find the probability of type S error decreases rapidly. To ensure that $s ≤ 0.1$
 and $s ≤ 0.01$, we only need $power = 0.08$ and $power = 0.17$, respectively. Thus,
 unless your study is severely underpowered, you shouldn't
 need to worry about type s errors very often.
