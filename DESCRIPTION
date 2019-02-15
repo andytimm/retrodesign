@@ -30,5 +30,6 @@ Imports: graphics
 Suggests: ggplot2,
     knitr,
     rmarkdown,
-    gridExtra
+    gridExtra,
+    testthat
 VignetteBuilder: knitr

@@ -30,6 +30,10 @@
 #' @export
 #' @import stats
 retrodesign <- function (A, s, alpha=.05, df=Inf, n.sims=10000) {
+  if (s < 0){
+    stop("standard errors shouldn't be negative, try again")
+  }
+
   UseMethod("retrodesign", A)
 }
 
@@ -57,10 +61,14 @@ retrodesign.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
   p.hi <- 1 - pt(z-A/s, df)
   p.lo <- pt(-z-A/s, df)
   power <- p.hi + p.lo
-  typeS <- p.lo/power
-  estimate <- A + s*rt(n.sims,df)
+  if (A >= 0) {
+    typeS <- p.lo/power
+  }
+  else {typeS <- 1- (p.lo/power)}
+  # Error suppressed below is intentional reclying when a vector is passed
+  estimate <- suppressWarnings(A + s*rt(n.sims,df))
   significant <- abs(estimate) > s*z
-  exaggeration <- mean(abs(estimate)[significant])/A
+  exaggeration <- abs(mean(abs(estimate)[significant])/A)
 return(list(power=power, typeS=typeS, exaggeration=exaggeration))
 }
 
@@ -118,6 +126,10 @@ retrodesign.list <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
 #' @export
 #' @import stats
 retro_design <- function (A, s, alpha=.05) {
+  if (s < 0){
+    stop("standard errors shouldn't be negative, try again")
+  }
+
   UseMethod("retro_design", A)
 }
 
@@ -147,7 +159,7 @@ retro_design.numeric <- function(A, s, alpha=.05){
               lambda*(pt(lambda + z, df=Inf) +pt(lambda-z, df=Inf) - 1))/
                   (lambda*(1 - pt(lambda + z, df=Inf) + pt(lambda - z, df=Inf)))
 
-  return(list(power=power, typeS=typeS, typeM=typeM))
+  return(list(power=power, typeS=typeS, typeM=abs(typeM)))
 }
 
 #' List retro_design
@@ -193,6 +205,10 @@ retro_design.list <- function(A, s, alpha=.05){
 #' @export
 #' @import stats
 type_s <- function (A, s, alpha=.05) {
+  if (s < 0){
+    stop("standard errors shouldn't be negative, try again")
+  }
+
   UseMethod("type_s", A)
 }
 
@@ -269,6 +285,10 @@ type_s.list <- function(A, s, alpha=.05){
 #' @export
 #' @import stats
 type_m <- function (A, s, alpha=.05, df=Inf, n.sims=10000) {
+  if (s < 0){
+    stop("standard errors shouldn't be negative, try again")
+  }
+
   UseMethod("type_m", A)
 }
 
@@ -293,10 +313,12 @@ type_m <- function (A, s, alpha=.05, df=Inf, n.sims=10000) {
 #' @import stats
 type_m.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
   z <- qt(1-alpha/2, df)
-  estimate <- A + s*rt(n.sims,df)
+  # As in retrodesign, suppressed error below is intention recyle when a vector
+  # is passes
+  estimate <- suppressWarnings(A + s*rt(n.sims,df))
   significant <- abs(estimate) > s*z
   exaggeration <- mean(abs(estimate)[significant])/A
-  return(list(type_m=exaggeration))
+  return(list(type_m=abs(exaggeration)))
 }
 
 #' List type_m
