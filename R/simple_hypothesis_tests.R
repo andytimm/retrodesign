@@ -61,10 +61,7 @@ retrodesign.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
   p.hi <- 1 - pt(z-A/s, df)
   p.lo <- pt(-z-A/s, df)
   power <- p.hi + p.lo
-  if (A >= 0) {
-    typeS <- p.lo/power
-  }
-  else {typeS <- 1- (p.lo/power)}
+  typeS <- ifelse(A >= 0, p.lo/power, 1- (p.lo/power))
   # Error suppressed below is intentional reclying when a vector is passed
   estimate <- suppressWarnings(A + s*rt(n.sims,df))
   significant <- abs(estimate) > s*z
@@ -152,7 +149,7 @@ retro_design.numeric <- function(A, s, alpha=.05){
   p.hi <- 1 - pt(z-A/s, df=Inf)
   p.lo <- pt(-z-A/s, df=Inf)
   power <- p.hi + p.lo
-  typeS <- p.lo/power
+  typeS <- ifelse(A >= 0, p.lo/power, 1- (p.lo/power))
   lambda <- A/s
 
   typeM <- (dt(lambda + z, df=Inf) + dt(lambda - z, df=Inf) +
@@ -232,7 +229,7 @@ type_s.numeric <- function(A, s, alpha=.05){
   p.hi <- 1 - pt(z-A/s, df=Inf)
   p.lo <- pt(-z-A/s, df=Inf)
   power <- p.hi + p.lo
-  typeS <- p.lo/power
+  typeS <- ifelse(A >= 0, p.lo/power, 1- (p.lo/power))
 
   return(list(type_s=typeS))
 }
