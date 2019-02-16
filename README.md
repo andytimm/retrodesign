@@ -20,7 +20,7 @@ library(devtools)
 install_github("andytimm/retrodesign")
 ```
 
-You can find an online version of retrodesign's vignette [on my website](https://andytimm.github.io/2019/02/05/Intro_To_retrodesign.html).
+You can find an online version of retrodesign's vignette [on my website](https://andytimm.github.io/2019/02/05/Intro_To_retrodesign.html), which provides an introduction to both `retrodesign` and Type S/M errors.
 
 # More Reading on Type S/M Errors
 
