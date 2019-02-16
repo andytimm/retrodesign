@@ -17,7 +17,7 @@ retrodesign(A, s, alpha = 0.05, df = Inf, n.sims = 10000)
 to a normal distribution.}
 
 \item{n.sims}{a numeric, how many times to simulate when calculating Type M
-error}
+error.}
 }
 \value{
 either a list of length 3 containing the power, type s, and type M
@@ -30,7 +30,7 @@ df, depending on whether a single true effect size or range is provided.
 retro_design() is faster as it uses the closed form solution from Lu et al.
 (2018), but this function can be used for t distributions, whereas
 retro_design() cannot. Function originally provided in Gelman and
- Carlin (2014), reused with permission.
+Carlin (2014), reused with permission.
 }
 \examples{
 retrodesign(1,3.28)

@@ -10,7 +10,7 @@
 #' retro_design() is faster as it uses the closed form solution from Lu et al.
 #' (2018), but this function can be used for t distributions, whereas
 #' retro_design() cannot. Function originally provided in Gelman and
-#'  Carlin (2014), reused with permission.
+#' Carlin (2014), reused with permission.
 #'
 #'
 #' @param A a numeric or list, an estimate of the true effect size
@@ -19,7 +19,7 @@
 #' @param df a numeric, the degrees of freedom. df=Inf is equivalent
 #' to a normal distribution.
 #' @param n.sims a numeric, how many times to simulate when calculating Type M
-#' error
+#' error.
 #' @return either a list of length 3 containing the power, type s, and type M
 #' error, or if A is a list, a df that is 4 by length(A), with an effect size
 #' and it's corresponding power, type s, and type m errors in each row.
@@ -145,16 +145,16 @@ retro_design <- function (A, s, alpha=.05) {
 #' retrodesign(2,8.1)
 #' @export
 retro_design.numeric <- function(A, s, alpha=.05){
-  z <- qt(1-alpha/2, df=Inf)
-  p.hi <- 1 - pt(z-A/s, df=Inf)
-  p.lo <- pt(-z-A/s, df=Inf)
+  z <- qnorm(1-alpha/2)
+  p.hi <- 1 - pnorm(z-A/s)
+  p.lo <- pnorm(-z-A/s)
   power <- p.hi + p.lo
   typeS <- ifelse(A >= 0, p.lo/power, 1- (p.lo/power))
   lambda <- A/s
 
-  typeM <- (dt(lambda + z, df=Inf) + dt(lambda - z, df=Inf) +
-              lambda*(pt(lambda + z, df=Inf) +pt(lambda-z, df=Inf) - 1))/
-                  (lambda*(1 - pt(lambda + z, df=Inf) + pt(lambda - z, df=Inf)))
+  typeM <- (dnorm(lambda + z) + dnorm(lambda - z) +
+              lambda*(pnorm(lambda + z) +pnorm(lambda-z) - 1))/
+                  (lambda*(1 - pnorm(lambda + z) + pnorm(lambda - z)))
 
   return(list(power=power, typeS=typeS, typeM=abs(typeM)))
 }
