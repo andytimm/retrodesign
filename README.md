@@ -7,7 +7,7 @@ Features:
 
 * Functions for calculating Power and Type S/M errors across variety of effect sizes, building on code provided in Gelman and Carlin (2014, see below).
 
-* Graphics function for visualizing errors with or without ggplot
+* Graphics function for visualizing these errors with or without ggplot
 
 * Implementation of Lu et al's (2018, see below) closed form solution for Type M error, providing a speed-up.
 
@@ -20,7 +20,7 @@ library(devtools)
 install_github("andytimm/retrodesign")
 ```
 
-You can find an online version of it's vignette [on my website](https://andytimm.github.io/2019/02/05/Intro_To_retrodesign.html).
+You can find an online version of retrodesign's vignette [on my website](https://andytimm.github.io/2019/02/05/Intro_To_retrodesign.html).
 
 # More Reading on Type S/M Errors
 
