@@ -2,16 +2,16 @@ Package: retrodesign
 Type: Package
 Title: Tools For Type S (Sign) and Type M (Magnitude) errors
 Version: 0.1.0
-Authors@R: as.person(c(
-    "Andy Timm <timmandrew1@gmail.com> [aut, cre]", 
-    "Andrew Gelman [ctb]",
-    "John Carlin [ctb]"
-  ))
-Description: This package provides tools for working with Type S (Sign) and
+Authors@R: c(
+    person("Andy", "Timm", email = "timmandrew1@gmail.com", role = c("cre","aut")), 
+    person("Andrew", "Gelman", role = "ctb"),
+    person("John", "Carlin", role = "ctb")
+  )
+Description: Provides tools for working with Type S (Sign) and
     Type M (Magnitude) errors, as proposed in Gelman and Tuerlinckx (2000) and
     Gelman & Carlin (2014). In addition to simply calculating the probability of
     Type S/M error, the package includes functions for calculating these errors
-    across a variety of effect sizes for comparison, and reccomended sample size
+    across a variety of effect sizes for comparison, and recommended sample size
     given 'tolerances' for Type S/M errors. To improve the speed of these
     calculations, closed forms solutions for the probability of a Type S/M error
     from Lu, Qiu, and Deng (2018) are implemented. As of 0.1.0, this includes
