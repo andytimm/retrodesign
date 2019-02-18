@@ -14,7 +14,7 @@ Description: Provides tools for working with Type S (Sign) and
     across a variety of effect sizes for comparison, and recommended sample size
     given 'tolerances' for Type S/M errors. To improve the speed of these
     calculations, closed forms solutions for the probability of a Type S/M error
-    from Lu, Qiu, and Deng (2018) are implemented. As of 0.1.0, this includes
+    from Lu, Qiu, and Deng (2018) are implemented. As of 1.0.0, this includes
     support only for simple research designs. See the
     package vignette for a fuller exposition on how Type S/M errors arise in
     research, and how to analyze them using the type of design analysis proposed
