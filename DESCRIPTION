@@ -3,7 +3,7 @@ Type: Package
 Title: Tools for Type S (Sign) and Type M (Magnitude) errors
 Version: 1.0.0
 Authors@R: c(
-    person("Andy", "Timm", email = "timmandrew1@gmail.com", role = c("cre","aut")), 
+    person("Andrew", "Timm", email = "timmandrew1@gmail.com", role = c("cre","aut")), 
     person("Andrew", "Gelman", role = "ctb"),
     person("John", "Carlin", role = "ctb")
   )
