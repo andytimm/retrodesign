@@ -278,7 +278,7 @@ procedures](http://www.stat.columbia.edu/~gelman/research/published/francis8.pdf
  desirable properties it has in more depth than I do here. It is also the source of the original
  retrodesign() function, which I re-use in the package with permission.
 3. **Lu et al's [A note on Type S/M errors in hypothesis testing](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
-(2018)**: Lu and coauthors go further into the mathematical properties of Type S/M errors, and prove the closed form solutions implimented in `retrodesign`. 
+(2018)**: Lu and coauthors go further into the mathematical properties of Type S/M errors, and prove the closed form solutions implemented in `retrodesign`. 
 4. **McShane et al's [Abandon Statistical Significance](https://arxiv.org/abs/1709.07588) (2017)**: If you
 want a starting point on the challenges with NHST that have led many statisticians
 to argue for abandoning NHST all together, and starting points for alternative

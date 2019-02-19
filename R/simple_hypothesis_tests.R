@@ -243,7 +243,7 @@ type_s.numeric <- function(A, s, alpha=.05){
 #' @param s a numeric, standard error of the estimate
 #' @param alpha a numeric, the statistical significance threshold
 #' @return A df that is 2 by length(A), with an effect size
-#' and it's correspondingtype s errors in each row.
+#' and it's corresponding type s errors in each row.
 #' @examples
 #' type_s(list(.2,2,20),8.1)
 #' @export
@@ -331,7 +331,7 @@ type_m.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
 #' @param n.sims a numeric, how many times to simulate when calculating Type M
 #' error
 #' @return A df that is 2 by length(A), with an effect size
-#' and it's correspondingtype m errors in each row.
+#' and it's corresponding type m errors in each row.
 #' @examples
 #' type_s(list(.2,2,20),8.1)
 #' @export
