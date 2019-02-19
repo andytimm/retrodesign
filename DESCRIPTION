@@ -1,6 +1,6 @@
 Package: retrodesign
 Type: Package
-Title: Tools for Type S (Sign) and Type M (Magnitude) errors
+Title: Tools for Type S (Sign) and Type M (Magnitude) Errors
 Version: 0.1.0
 Authors@R: c(
     person("Andrew", "Timm", email = "timmandrew1@gmail.com", role = c("cre","aut")), 
@@ -9,14 +9,14 @@ Authors@R: c(
   )
 Description: Provides tools for working with Type S (Sign) and
     Type M (Magnitude) errors, as proposed in Gelman and Tuerlinckx (2000)
-    (https://doi.org/10.1007/s001800000040) and
-    Gelman & Carlin (2014) (https://doi.org/10.1177/1745691614551642).
+    <doi.org/10.1007/s001800000040> and
+    Gelman & Carlin (2014) <doi.org/10.1177/1745691614551642>.
     In addition to simply calculating the probability of
     Type S/M error, the package includes functions for calculating these errors
     across a variety of effect sizes for comparison, and recommended sample size
     given 'tolerances' for Type S/M errors. To improve the speed of these
     calculations, closed forms solutions for the probability of a Type S/M error
-    from Lu, Qiu, and Deng (2018) (https://doi.org/10.1111/bmsp.12132)
+    from Lu, Qiu, and Deng (2018) <doi.org/10.1111/bmsp.12132>
     are implemented. As of 1.0.0, this includes
     support only for simple research designs. See the
     package vignette for a fuller exposition on how Type S/M errors arise in

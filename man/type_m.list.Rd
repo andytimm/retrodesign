@@ -21,7 +21,7 @@ error}
 }
 \value{
 A df that is 2 by length(A), with an effect size
-and it's correspondingtype m errors in each row.
+and it's corresponding type m errors in each row.
 }
 \description{
 type_m.list is the S3 method of the generic type_m() function,

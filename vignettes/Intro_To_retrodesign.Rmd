@@ -3,7 +3,7 @@ title: "An Introduction to Type S and M errors in Hypothesis Testing"
 author: Andrew Timm
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{An Introduction to Type S and M errors inHypothesis Testing}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

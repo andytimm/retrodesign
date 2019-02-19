@@ -15,7 +15,7 @@
 }
 \value{
 A df that is 2 by length(A), with an effect size
-and it's correspondingtype s errors in each row.
+and it's corresponding type s errors in each row.
 }
 \description{
 type_s.list is the S3 method of the generic type_s() function,
