@@ -4,7 +4,8 @@
 \alias{type_m.numeric}
 \title{Numeric type_m}
 \usage{
-\method{type_m}{numeric}(A, s, alpha = 0.05, df = Inf, n.sims = 10000)
+\method{type_m}{numeric}(A, s, alpha = 0.05, df = Inf,
+  n.sims = 10000)
 }
 \arguments{
 \item{A}{a numeric, estimate of the true effect size}

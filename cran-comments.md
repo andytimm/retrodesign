@@ -1,5 +1,5 @@
 ## Test Envionments
-* Local Windows 10 64-bit install R 3.4.4 
+* Local Windows 10 64-bit install R 3.5.2 
 * Ubuntu 14.04.5 (via Travis-CI), R 3.5.2
 * win-builder (devel)
 

@@ -4,7 +4,8 @@
 \alias{retrodesign.list}
 \title{List retrodesign}
 \usage{
-\method{retrodesign}{list}(A, s, alpha = 0.05, df = Inf, n.sims = 10000)
+\method{retrodesign}{list}(A, s, alpha = 0.05, df = Inf,
+  n.sims = 10000)
 }
 \arguments{
 \item{A}{a list, estimates of the true effect size}
