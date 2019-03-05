@@ -14,7 +14,7 @@ Description: Provides tools for working with Type S (Sign) and
     In addition to simply calculating the probability of
     Type S/M error, the package includes functions for calculating these errors
     across a variety of effect sizes for comparison, and recommended sample size
-    given 'tolerances' for Type S/M errors. To improve the speed of these
+    given "tolerances" for Type S/M errors. To improve the speed of these
     calculations, closed forms solutions for the probability of a Type S/M error
     from Lu, Qiu, and Deng (2018) <doi.org/10.1111/bmsp.12132>
     are implemented. As of 1.0.0, this includes
