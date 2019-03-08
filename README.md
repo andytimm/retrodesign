@@ -1,5 +1,6 @@
 # retrodesign
 [![Build Status](https://travis-ci.org/andytimm/retrodesign.svg?branch=master)](https://travis-ci.org/andytimm/retrodesign)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/retrodesign)](https://cran.r-project.org/package=retrodesign)
 
 Tools for calculating and working with Gelman et al's Type S (sign), and M (magnitude or exaggeration ratio) errors for analyzing hypothesis tests in R.
 
