@@ -1,5 +1,4 @@
 # retrodesign
-[![Build Status](https://travis-ci.org/andytimm/retrodesign.svg?branch=master)](https://travis-ci.org/andytimm/retrodesign)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/retrodesign)](https://cran.r-project.org/package=retrodesign)
 
 Tools for calculating and working with Gelman et al's Type S (sign), and M (magnitude or exaggeration ratio) errors for analyzing hypothesis tests in R.
@@ -20,7 +19,7 @@ You can install retrodesign with:
 install.packages("retrodesign")
 ```
 
-You can find an online version of retrodesign's vignette [on my website](https://andytimm.github.io/2019/02/05/Intro_To_retrodesign.html), which provides an introduction to both `retrodesign` and Type S/M errors.
+You can find an online version of retrodesign's vignette [on my website](https://andytimm.github.io/posts/Intro%20to%20Retrodesign/2019-02-05-Intro_To_retrodesign.html), which provides an introduction to both `retrodesign` and Type S/M errors.
 
 # More Reading on Type S/M Errors
 
