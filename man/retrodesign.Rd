@@ -30,7 +30,7 @@ df, depending on whether a single true effect size or range is provided.
 retro_design() is faster as it uses the closed form solution from Lu et al.
 (2018), but this function can be used for t distributions, whereas
 retro_design() cannot. Function originally provided in Gelman and
-Carlin (2014), reused with permission.
+Carlin (2014), modified with permission.
 }
 \examples{
 retrodesign(1,3.28)

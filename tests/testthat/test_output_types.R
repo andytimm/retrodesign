@@ -4,11 +4,11 @@ library(testthat)
 context("output type")
 
 test_that("output types are correct for retro_design.numeric", {
-  expect_identical(class(retro_design(.5,1)),"list")
-  expect_identical(class(retro_design(.5,1.1)),"list")
-  expect_identical(class(retro_design(1,2)),"list")
-  expect_identical(class(retro_design(-.5,1.1)),"list")
-  expect_identical(class(retro_design(c(-.5,1,2),1.1)),"list")
+  expect_identical(class(retro_design_closed_form(.5,1)),"list")
+  expect_identical(class(retro_design_closed_form(.5,1.1)),"list")
+  expect_identical(class(retro_design_closed_form(1,2)),"list")
+  expect_identical(class(retro_design_closed_form(-.5,1.1)),"list")
+  expect_identical(class(retro_design_closed_form(c(-.5,1,2),1.1)),"list")
 })
 
 test_that("output types are correct for retrodesign.numeric", {
@@ -20,8 +20,8 @@ test_that("output types are correct for retrodesign.numeric", {
 })
 
 test_that("output types are correct for retro_design.list", {
-  expect_identical(class(retro_design(list(1,2,3,4),1)),"data.frame")
-  expect_identical(class(retro_design(list(.1,-2,3,4),1.1)),"data.frame")
+  expect_identical(class(retro_design_closed_form(list(1,2,3,4),1)),"data.frame")
+  expect_identical(class(retro_design_closed_form(list(.1,-2,3,4),1.1)),"data.frame")
 })
 
 test_that("output types are correct for retrodesign.list", {

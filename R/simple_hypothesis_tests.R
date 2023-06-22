@@ -103,6 +103,10 @@ retrodesign.list <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
 
 #' retro_design: Calculates Power, Type S, and Type M error
 #'
+#' This function name is deprecated in favor of the more clearly named
+#' retro_design_closed_form; it won't be removed in any hurry, just trying
+#' to move the naming conventions to be clearer and easier to use.
+#'
 #' Calculates Power, Type S, and Type M error and returns them in a list or
 #' df, depending on whether a single true effect size or range is provided.
 #' Uses the closed form solution found for the Type-M error found by Lu et al.
@@ -127,12 +131,46 @@ retro_design <- function (A, s, alpha=.05) {
     stop("standard errors shouldn't be negative, try again")
   }
 
-  UseMethod("retro_design", A)
+  warning("Note: this version of the function is deprecated in favor
+          of the more clearly named retro_design_closed_form. We'd suggest
+          switching your code to use that; note that this is the closed
+          form solution")
+
+  UseMethod("retro_design_closed_form", A)
 }
 
-#' Numeric retro_design
+#' retro_design_closed_form: Calculates Power, Type S, and Type M error
 #'
-#' retro_design.numeric is the S3 method of the generic retro_design() function,
+#' Calculates Power, Type S, and Type M error and returns them in a list or
+#' df, depending on whether a single true effect size or range is provided.
+#' Uses the closed form solution found for the Type-M error found by Lu et al.
+#' (2018), and thus is faster than retrodesign. For t distributions, use
+#' retrodesign() instead; the closed form solution only applies in the normal
+#' case.
+#'
+#'
+#' @param A a numeric or list, an estimate of the true effect size
+#' @param s a numeric, standard error of the estimate
+#' @param alpha a numeric, the statistical significance threshold
+#' @return either a list of length 3 containing the power, type s, and type M
+#' error, or if A is a list, a df that is 4 by length(A), with an effect size
+#' and it's corresponding power, type s, and type m errors in each row.
+#' @examples
+#' retrodesign(1,3.28)
+#' retrodesign(list(.2,2,20),8.1)
+#' @export
+#' @import stats
+retro_design_closed_form <- function (A, s, alpha=.05) {
+  if (s < 0){
+    stop("standard errors shouldn't be negative, try again")
+  }
+
+  UseMethod("retro_design_closed_form", A)
+}
+
+#' Numeric retro_design_closed_form
+#'
+#' retro_design_closed_form.numeric is the S3 method of the generic retro_design_closed_form() function,
 #' used when a single numeric is passed for A.
 #'
 #' @param A a numeric, an estimate of the true effect size
@@ -144,7 +182,7 @@ retro_design <- function (A, s, alpha=.05) {
 #' retrodesign(1,3.28)
 #' retrodesign(2,8.1)
 #' @export
-retro_design.numeric <- function(A, s, alpha=.05){
+retro_design_closed_form.numeric <- function(A, s, alpha=.05){
   z <- qnorm(1-alpha/2)
   p.hi <- 1 - pnorm(z-A/s)
   p.lo <- pnorm(-z-A/s)
@@ -159,9 +197,9 @@ retro_design.numeric <- function(A, s, alpha=.05){
   return(list(power=power, type_s=typeS, type_m=abs(typeM)))
 }
 
-#' List retro_design
+#' List retro_design_closed_form
 #'
-#' retro_design.list is the S3 method of the generic retro_design() function,
+#' retro_design_closed_form.list is the S3 method of the generic retro_design_closed_form() function,
 #' used when a list is passed for A.
 #'
 #' @param A a list, estimates of the true effect size
@@ -172,9 +210,9 @@ retro_design.numeric <- function(A, s, alpha=.05){
 #' @examples
 #' retro_design(list(.2,2,20),8.1)
 #' @export
-retro_design.list <- function(A, s, alpha=.05){
+retro_design_closed_form.list <- function(A, s, alpha=.05){
 
-  list_of_lists <- lapply(A,retro_design.numeric,s,alpha)
+  list_of_lists <- lapply(A,retro_design_closed_form.numeric,s,alpha)
   matrix_form <- do.call(rbind,list_of_lists)
 
   mat_with_effects <- cbind(A,matrix_form)

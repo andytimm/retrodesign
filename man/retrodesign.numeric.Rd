@@ -4,8 +4,7 @@
 \alias{retrodesign.numeric}
 \title{Numeric retrodesign}
 \usage{
-\method{retrodesign}{numeric}(A, s, alpha = 0.05, df = Inf,
-  n.sims = 10000)
+\method{retrodesign}{numeric}(A, s, alpha = 0.05, df = Inf, n.sims = 10000)
 }
 \arguments{
 \item{A}{a numeric, an estimate of the true effect size}
