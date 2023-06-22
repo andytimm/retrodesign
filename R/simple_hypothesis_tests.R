@@ -10,7 +10,7 @@
 #' retro_design() is faster as it uses the closed form solution from Lu et al.
 #' (2018), but this function can be used for t distributions, whereas
 #' retro_design() cannot. Function originally provided in Gelman and
-#' Carlin (2014), reused with permission.
+#' Carlin (2014), modified with permission.
 #'
 #'
 #' @param A a numeric or list, an estimate of the true effect size
@@ -66,7 +66,7 @@ retrodesign.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
   estimate <- suppressWarnings(A + s*rt(n.sims,df))
   significant <- abs(estimate) > s*z
   exaggeration <- abs(mean(abs(estimate)[significant])/A)
-return(list(power=power, typeS=typeS, exaggeration=exaggeration))
+  return(list(power=power, type_s=typeS, type_m=exaggeration))
 }
 
 #' List retrodesign
@@ -154,9 +154,9 @@ retro_design.numeric <- function(A, s, alpha=.05){
 
   typeM <- (dnorm(lambda + z) + dnorm(lambda - z) +
               lambda*(pnorm(lambda + z) +pnorm(lambda-z) - 1))/
-                  (lambda*(1 - pnorm(lambda + z) + pnorm(lambda - z)))
+    (lambda*(1 - pnorm(lambda + z) + pnorm(lambda - z)))
 
-  return(list(power=power, typeS=typeS, typeM=abs(typeM)))
+  return(list(power=power, type_s=typeS, type_m=abs(typeM)))
 }
 
 #' List retro_design
