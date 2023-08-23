@@ -10,7 +10,7 @@
 #' retro_design() is faster as it uses the closed form solution from Lu et al.
 #' (2018), but this function can be used for t distributions, whereas
 #' retro_design() cannot. Function originally provided in Gelman and
-#' Carlin (2014), reused with permission.
+#' Carlin (2014), modified with permission.
 #'
 #'
 #' @param A a numeric or list, an estimate of the true effect size
@@ -40,7 +40,9 @@ retrodesign <- function (A, s, alpha=.05, df=Inf, n.sims=10000) {
 #' Numeric retrodesign
 #'
 #' retrodesign.numeric is the S3 method of the generic retrodesign() function,
-#' used when a single numeric is passed for A.
+#' used when a single numeric is passed for A. Martijn Weterings kindly
+#' provided code to slightly improve this in the very low N case using
+#' the non-central t-distribution.
 #'
 #' @param A a numeric, an estimate of the true effect size
 #' @param s a numeric, standard error of the estimate
@@ -57,16 +59,30 @@ retrodesign <- function (A, s, alpha=.05, df=Inf, n.sims=10000) {
 #' retrodesign(.5,1,df=10)
 #' @export
 retrodesign.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
-  z <- qt(1-alpha/2, df)
-  p.hi <- 1 - pt(z-A/s, df)
-  p.lo <- pt(-z-A/s, df)
-  power <- p.hi + p.lo
-  typeS <- ifelse(A >= 0, p.lo/power, 1- (p.lo/power))
-  # Error suppressed below is intentional reclying when a vector is passed
-  estimate <- suppressWarnings(A + s*rt(n.sims,df))
-  significant <- abs(estimate) > s*z
-  exaggeration <- abs(mean(abs(estimate)[significant])/A)
-return(list(power=power, typeS=typeS, exaggeration=exaggeration))
+  # Just back out n/d from df; keeps all functions with the same inputs
+  n = 2 / (s^2)
+  d = abs(A)
+
+  ### boundary for alpha level t-test
+  tc = qt(1-alpha/2, df = df)
+
+  ### power
+  power = pt(-tc, df = df, ncp=d/sqrt(2/n)) +
+    1-pt( tc, df = df, ncp=d/sqrt(2/n))
+
+  ### s-error rate
+  type_s = pt(-tc, df = df, ncp=d/sqrt(2/n))/power
+
+  ### simulate experiments
+  x0 = rnorm(n.sims,0)
+
+  ### m-error
+  type_m = sapply(d, FUN = function(di) {
+    x = abs(x0+di*sqrt(n/2))
+    significant = x/s>tc
+    return(mean(x[significant == 1]/sqrt(n/2))/di)
+  })
+  return(list(power = power, type_s = type_s, type_m = type_m))
 }
 
 #' List retrodesign
@@ -103,6 +119,10 @@ retrodesign.list <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
 
 #' retro_design: Calculates Power, Type S, and Type M error
 #'
+#' This function name is deprecated in favor of the more clearly named
+#' retro_design_closed_form; it won't be removed in any hurry, just trying
+#' to move the naming conventions to be clearer and easier to use.
+#'
 #' Calculates Power, Type S, and Type M error and returns them in a list or
 #' df, depending on whether a single true effect size or range is provided.
 #' Uses the closed form solution found for the Type-M error found by Lu et al.
@@ -127,12 +147,46 @@ retro_design <- function (A, s, alpha=.05) {
     stop("standard errors shouldn't be negative, try again")
   }
 
-  UseMethod("retro_design", A)
+  warning("Note: this version of the function is deprecated in favor
+          of the more clearly named retro_design_closed_form. We'd suggest
+          switching your code to use that; note that this is the closed
+          form solution")
+
+  UseMethod("retro_design_closed_form", A)
 }
 
-#' Numeric retro_design
+#' retro_design_closed_form: Calculates Power, Type S, and Type M error
 #'
-#' retro_design.numeric is the S3 method of the generic retro_design() function,
+#' Calculates Power, Type S, and Type M error and returns them in a list or
+#' df, depending on whether a single true effect size or range is provided.
+#' Uses the closed form solution found for the Type-M error found by Lu et al.
+#' (2018), and thus is faster than retrodesign. For t distributions, use
+#' retrodesign() instead; the closed form solution only applies in the normal
+#' case.
+#'
+#'
+#' @param A a numeric or list, an estimate of the true effect size
+#' @param s a numeric, standard error of the estimate
+#' @param alpha a numeric, the statistical significance threshold
+#' @return either a list of length 3 containing the power, type s, and type M
+#' error, or if A is a list, a df that is 4 by length(A), with an effect size
+#' and it's corresponding power, type s, and type m errors in each row.
+#' @examples
+#' retrodesign(1,3.28)
+#' retrodesign(list(.2,2,20),8.1)
+#' @export
+#' @import stats
+retro_design_closed_form <- function (A, s, alpha=.05) {
+  if (s < 0){
+    stop("standard errors shouldn't be negative, try again")
+  }
+
+  UseMethod("retro_design_closed_form", A)
+}
+
+#' Numeric retro_design_closed_form
+#'
+#' retro_design_closed_form.numeric is the S3 method of the generic retro_design_closed_form() function,
 #' used when a single numeric is passed for A.
 #'
 #' @param A a numeric, an estimate of the true effect size
@@ -144,7 +198,7 @@ retro_design <- function (A, s, alpha=.05) {
 #' retrodesign(1,3.28)
 #' retrodesign(2,8.1)
 #' @export
-retro_design.numeric <- function(A, s, alpha=.05){
+retro_design_closed_form.numeric <- function(A, s, alpha=.05){
   z <- qnorm(1-alpha/2)
   p.hi <- 1 - pnorm(z-A/s)
   p.lo <- pnorm(-z-A/s)
@@ -154,14 +208,14 @@ retro_design.numeric <- function(A, s, alpha=.05){
 
   typeM <- (dnorm(lambda + z) + dnorm(lambda - z) +
               lambda*(pnorm(lambda + z) +pnorm(lambda-z) - 1))/
-                  (lambda*(1 - pnorm(lambda + z) + pnorm(lambda - z)))
+    (lambda*(1 - pnorm(lambda + z) + pnorm(lambda - z)))
 
-  return(list(power=power, typeS=typeS, typeM=abs(typeM)))
+  return(list(power=power, type_s=typeS, type_m=abs(typeM)))
 }
 
-#' List retro_design
+#' List retro_design_closed_form
 #'
-#' retro_design.list is the S3 method of the generic retro_design() function,
+#' retro_design_closed_form.list is the S3 method of the generic retro_design_closed_form() function,
 #' used when a list is passed for A.
 #'
 #' @param A a list, estimates of the true effect size
@@ -172,9 +226,9 @@ retro_design.numeric <- function(A, s, alpha=.05){
 #' @examples
 #' retro_design(list(.2,2,20),8.1)
 #' @export
-retro_design.list <- function(A, s, alpha=.05){
+retro_design_closed_form.list <- function(A, s, alpha=.05){
 
-  list_of_lists <- lapply(A,retro_design.numeric,s,alpha)
+  list_of_lists <- lapply(A,retro_design_closed_form.numeric,s,alpha)
   matrix_form <- do.call(rbind,list_of_lists)
 
   mat_with_effects <- cbind(A,matrix_form)
@@ -308,14 +362,31 @@ type_m <- function (A, s, alpha=.05, df=Inf, n.sims=10000) {
 #' type_m(1,3.28)
 #' @export
 #' @import stats
-type_m.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
-  z <- qt(1-alpha/2, df)
-  # As in retrodesign, suppressed error below is intention recyle when a vector
-  # is passes
-  estimate <- suppressWarnings(A + s*rt(n.sims,df))
-  significant <- abs(estimate) > s*z
-  exaggeration <- mean(abs(estimate)[significant])/A
-  return(list(type_m=abs(exaggeration)))
+type_m.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=100000){
+  # Just back out n/d from df; keeps all functions with the same inputs
+  n = 2 / (s^2)
+  d = abs(A)
+
+  ### boundary for alpha level t-test
+  tc = qt(1-alpha/2, df = df)
+
+  ### power
+  #power = pt(-tc, df = df, ncp=d/sqrt(2/n)) +
+  #  1-pt( tc, df = df, ncp=d/sqrt(2/n))
+
+  ### s-error rate
+  #type_s = pt(-tc, df = df, ncp=d/sqrt(2/n))/power
+
+  ### simulate experiments
+  x0 = rnorm(n.sims,0)
+
+  ### m-error
+  type_m = sapply(d, FUN = function(di) {
+    x = abs(x0+di*sqrt(n/2))
+    significant = x/s>tc
+    return(mean(x[significant == 1]/sqrt(n/2))/di)
+  })
+  return(list(type_m = type_m))
 }
 
 #' List type_m

@@ -4,8 +4,7 @@
 \alias{retrodesign.numeric}
 \title{Numeric retrodesign}
 \usage{
-\method{retrodesign}{numeric}(A, s, alpha = 0.05, df = Inf,
-  n.sims = 10000)
+\method{retrodesign}{numeric}(A, s, alpha = 0.05, df = Inf, n.sims = 10000)
 }
 \arguments{
 \item{A}{a numeric, an estimate of the true effect size}
@@ -26,7 +25,9 @@ error.
 }
 \description{
 retrodesign.numeric is the S3 method of the generic retrodesign() function,
-used when a single numeric is passed for A.
+used when a single numeric is passed for A. Martijn Weterings kindly
+provided code to slightly improve this in the very low N case using
+the non-central t-distribution.
 }
 \examples{
 retrodesign(1,3.28)
