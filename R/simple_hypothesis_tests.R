@@ -362,14 +362,31 @@ type_m <- function (A, s, alpha=.05, df=Inf, n.sims=10000) {
 #' type_m(1,3.28)
 #' @export
 #' @import stats
-type_m.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
-  z <- qt(1-alpha/2, df)
-  # As in retrodesign, suppressed error below is intention recyle when a vector
-  # is passes
-  estimate <- suppressWarnings(A + s*rt(n.sims,df))
-  significant <- abs(estimate) > s*z
-  exaggeration <- mean(abs(estimate)[significant])/A
-  return(list(type_m=abs(exaggeration)))
+type_m.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=100000){
+  # Just back out n/d from df; keeps all functions with the same inputs
+  n = 2 / (s^2)
+  d = abs(A)
+
+  ### boundary for alpha level t-test
+  tc = qt(1-alpha/2, df = df)
+
+  ### power
+  #power = pt(-tc, df = df, ncp=d/sqrt(2/n)) +
+  #  1-pt( tc, df = df, ncp=d/sqrt(2/n))
+
+  ### s-error rate
+  #type_s = pt(-tc, df = df, ncp=d/sqrt(2/n))/power
+
+  ### simulate experiments
+  x0 = rnorm(n.sims,0)
+
+  ### m-error
+  type_m = sapply(d, FUN = function(di) {
+    x = abs(x0+di*sqrt(n/2))
+    significant = x/s>tc
+    return(mean(x[significant == 1]/sqrt(n/2))/di)
+  })
+  return(list(type_m = type_m))
 }
 
 #' List type_m

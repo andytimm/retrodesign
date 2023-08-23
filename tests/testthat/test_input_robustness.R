@@ -58,3 +58,40 @@ test_that("type S error works for negative numbers", {
                    unlist(type_s(list(.5,1,2),1)$type_s[2]))
 
 })
+
+test_that("All functions are robust to vector input", {
+  # This comes by design from the update the new non-central t-dist
+  # code, but was not true in the original paper code. That was a known
+  # limitation of the paper code and it was never used incorrectly in the paper
+  # analysis, but a package should anticipate common mistakes.
+  # Note that to make test runtime more reasonable, we're using a fairly lax tol
+  expect_equal(retrodesign::retrodesign(c(10,rep(0.1,100)), 1, alpha = 0.05,
+                                        df = Inf, n.sims = 10^5)$type_m[1],
+
+               retrodesign::retrodesign(c(10), 1, alpha = 0.05,
+                                        df = Inf, n.sims = 10^5)$type_m,
+
+               tolerance = .001
+  )
+
+  expect_equal(retrodesign::retro_design_closed_form(c(.5,rep(0.1,100)), 1,
+                                                     alpha = 0.05)$type_m[1],
+
+               retrodesign::retro_design_closed_form(c(.5), 1,
+                                                     alpha = 0.05)$type_m,
+
+               tolerance = .001
+  )
+
+  # This is slightly lower tolerance just t
+  expect_equal(retrodesign::type_m(c(10,rep(0.1,100)), 1,
+                                                     alpha = 0.05)$type_m[1],
+
+               retrodesign::type_m(c(10), 1,
+                                                     alpha = 0.05)$type_m,
+
+               tolerance = .001
+  )
+
+
+})
