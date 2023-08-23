@@ -1,7 +1,7 @@
 ## Resubmission
 This is a resubmission. In this version I have:
 
-* Changed the single quotes around the word tolerences in the DESCRIPTION
+* Changed the single quotes around the word tolerances in the DESCRIPTION
 to full quotes as requested.
 
 ## Test Envionments

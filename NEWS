@@ -1,0 +1,17 @@
+retrodesign v0.2 (Release date: 2023-08-23)
+==============
+
+Changes:
+
+* Added use of a non-central t-distribution in the functions that use
+simulation. This makes a really minor difference outside tiny-n cases, but
+does improve results in those cases. Thanks to Martijn for the initial
+implementation I worked from!
+* retro_design is soft-depricated in favor of retro_design_closed_form, to
+make what the function does much clearer.
+* The original retrodesign function was ported with only minor changes, which
+meant it could give misleading results if instructions to use a list input for
+A were ignored. This is now resolved- a package should anticipate common
+input errors.
+* Names of outputs are now consistent across all functions.
+* Vignette was updated for above changes.

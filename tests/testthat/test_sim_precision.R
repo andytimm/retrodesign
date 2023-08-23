@@ -12,7 +12,7 @@ test_that("Error is less than .5 for 10,000 sims", {
          typeM_sim[x] <- unlist(type_m(.5,1, n.sims = 10000))
   }
 
-  typeM_exact <- rep(retro_design(.5,1)$typeM,1000)
+  typeM_exact <- rep(retro_design_closed_form(.5,1)$type_m,1000)
 
   expect_equal(typeM_sim,typeM_exact, tolerance = .5)
 
@@ -27,7 +27,7 @@ test_that("Error is less than .05 for 100,000 sims", {
     typeM_sim[x] <- unlist(type_m(.5,1, n.sims = 100000))
   }
 
-  typeM_exact <- rep(retro_design(.5,1)$typeM,1000)
+  typeM_exact <- rep(retro_design_closed_form(.5,1)$type_m,1000)
 
   expect_equal(typeM_sim,typeM_exact, tolerance = .05)
 
