@@ -40,7 +40,9 @@ retrodesign <- function (A, s, alpha=.05, df=Inf, n.sims=10000) {
 #' Numeric retrodesign
 #'
 #' retrodesign.numeric is the S3 method of the generic retrodesign() function,
-#' used when a single numeric is passed for A.
+#' used when a single numeric is passed for A. Martijn Weterings kindly
+#' provided code to slightly improve this in the very low N case using
+#' the non-central t-distribution.
 #'
 #' @param A a numeric, an estimate of the true effect size
 #' @param s a numeric, standard error of the estimate
@@ -57,16 +59,30 @@ retrodesign <- function (A, s, alpha=.05, df=Inf, n.sims=10000) {
 #' retrodesign(.5,1,df=10)
 #' @export
 retrodesign.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
-  z <- qt(1-alpha/2, df)
-  p.hi <- 1 - pt(z-A/s, df)
-  p.lo <- pt(-z-A/s, df)
-  power <- p.hi + p.lo
-  typeS <- ifelse(A >= 0, p.lo/power, 1- (p.lo/power))
-  # Error suppressed below is intentional reclying when a vector is passed
-  estimate <- suppressWarnings(A + s*rt(n.sims,df))
-  significant <- abs(estimate) > s*z
-  exaggeration <- abs(mean(abs(estimate)[significant])/A)
-  return(list(power=power, type_s=typeS, type_m=exaggeration))
+  # Just back out n/d from df; keeps all functions with the same inputs
+  n = 2 / (s^2)
+  d = abs(A)
+
+  ### boundary for alpha level t-test
+  tc = qt(1-alpha/2, df = df)
+
+  ### power
+  power = pt(-tc, df = df, ncp=d/sqrt(2/n)) +
+    1-pt( tc, df = df, ncp=d/sqrt(2/n))
+
+  ### s-error rate
+  type_s = pt(-tc, df = df, ncp=d/sqrt(2/n))/power
+
+  ### simulate experiments
+  x0 = rnorm(n.sims,0)
+
+  ### m-error
+  type_m = sapply(d, FUN = function(di) {
+    x = abs(x0+di*sqrt(n/2))
+    significant = x/s>tc
+    return(mean(x[significant == 1]/sqrt(n/2))/di)
+  })
+  return(list(power = power, type_s = type_s, type_m = type_m))
 }
 
 #' List retrodesign
