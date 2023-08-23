@@ -5,7 +5,8 @@ Version: 0.1.0
 Authors@R: c(
     person("Andrew", "Timm", email = "timmandrew1@gmail.com", role = c("cre","aut")), 
     person("Andrew", "Gelman", role = c("ctb", "cph")),
-    person("John", "Carlin", role = c("ctb", "cph"))
+    person("John", "Carlin", role = c("ctb", "cph")),
+    person("Martijn", "Weterings", role = c("ctb"))
   )
 Description: Provides tools for working with Type S (Sign) and
     Type M (Magnitude) errors, as proposed in Gelman and Tuerlinckx (2000)
