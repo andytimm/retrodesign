@@ -47,7 +47,7 @@ hypothesis testing, and provide definitional reminders along the way.
 ## An Initial Example
 
 To nail down the assumptions we're working with, we'll start with an abstract
-example from [Lu et al.](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
+example from [Lu et al.](https://bpspsychub.onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
 (2018); the second will draw on a real world scenario and follow
 Gelman and Carlin's suggested workflow for design analysis more closely.
 
@@ -132,7 +132,7 @@ NHST in the context of noisy, small sample studies, we'll move onto a real world
 example, where we'll focus on following Gelman and Carlin's suggested design
 analysis through one of their examples.
 
-We'll be working with [Kanazawa](https://www.ncbi.nlm.nih.gov/pubmed/16949101)
+We'll be working with [Kanazawa](https://pubmed.ncbi.nlm.nih.gov/16949101/)
 (2007), which claims to have found that the most attractive people are more likely to have
 girls. To be more specific, each of their ~3,000 people surveyed had been
 assigned a "attractiveness" score from 1-5, and they then compared the first born
@@ -223,7 +223,7 @@ m_plot <- ggplot(effect_m_pairs, aes(possible_effects, type_m)) + geom_point()
 grid.arrange(s_plot, m_plot, ncol=2)
 ```
 
-As [Lu et al.](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
+As [Lu et al.](https://bpspsychub.onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
 (2018) note, the type S and M error shrink at very different rates as power
 rises.
 
@@ -277,7 +277,7 @@ procedures](http://www.stat.columbia.edu/~gelman/research/published/francis8.pdf
  to more traditional design analysis, through several examples, and discuss the
  desirable properties it has in more depth than I do here. It is also the source of the original
  retrodesign() function, which I re-use in the package with permission.
-3. **Lu et al's [A note on Type S/M errors in hypothesis testing](https://onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
+3. **Lu et al's [A note on Type S/M errors in hypothesis testing](https://bpspsychub.onlinelibrary.wiley.com/doi/full/10.1111/bmsp.12132)
 (2018)**: Lu and coauthors go further into the mathematical properties of Type S/M errors, and prove the closed form solutions implemented in `retrodesign`. 
 4. **McShane et al's [Abandon Statistical Significance](https://arxiv.org/abs/1709.07588) (2017)**: If you
 want a starting point on the challenges with NHST that have led many statisticians
