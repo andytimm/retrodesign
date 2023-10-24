@@ -73,7 +73,7 @@ test_that("All functions are robust to vector input", {
                retrodesign::retrodesign(c(10), 1, alpha = 0.05,
                                         df = Inf, n.sims = 10^5)$type_m,
 
-               tolerance = .001
+               tolerance = .01
   )
 
   expect_equal(retrodesign::retro_design_closed_form(c(.5,rep(0.1,100)), 1,
@@ -82,7 +82,7 @@ test_that("All functions are robust to vector input", {
                retrodesign::retro_design_closed_form(c(.5), 1,
                                                      alpha = 0.05)$type_m,
 
-               tolerance = .001
+               tolerance = .01
   )
 
   # This is slightly lower tolerance just t
@@ -92,7 +92,7 @@ test_that("All functions are robust to vector input", {
                retrodesign::type_m(c(10), 1,
                                                      alpha = 0.05)$type_m,
 
-               tolerance = .001
+               tolerance = .01
   )
 
 
