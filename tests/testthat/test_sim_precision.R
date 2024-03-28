@@ -18,7 +18,7 @@ test_that("Error is less than .5 for 10,000 sims", {
 
 })
 
-# 100,000 sims is a good reccomendation when you need precise estimates of
+# 100,000 sims is a good recommendation when you need precise estimates of
 # type M error
 test_that("Error is less than .05 for 100,000 sims", {
   skip_on_cran()
