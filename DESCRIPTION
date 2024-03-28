@@ -1,7 +1,7 @@
 Package: retrodesign
 Type: Package
 Title: Tools for Type S (Sign) and Type M (Magnitude) Errors
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(
     person("Andrew", "Timm", email = "timmandrew1@gmail.com", role = c("cre","aut")), 
     person("Andrew", "Gelman", role = c("ctb", "cph")),
