@@ -79,7 +79,7 @@ retrodesign.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=10000){
   ### m-error
   type_m = sapply(d, FUN = function(di) {
     x = abs(x0+di*sqrt(n/2))
-    significant = x/s>tc
+    significant = x > tc
     return(mean(x[significant == 1]/sqrt(n/2))/di)
   })
   return(list(power = power, type_s = type_s, type_m = type_m))
@@ -383,7 +383,7 @@ type_m.numeric <- function(A, s, alpha=.05, df=Inf, n.sims=100000){
   ### m-error
   type_m = sapply(d, FUN = function(di) {
     x = abs(x0+di*sqrt(n/2))
-    significant = x/s>tc
+    significant = x > tc
     return(mean(x[significant == 1]/sqrt(n/2))/di)
   })
   return(list(type_m = type_m))
