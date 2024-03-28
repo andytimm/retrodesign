@@ -4,7 +4,7 @@ library(retrodesign)
 context("make sure that the simulation based method stays
         close to the closed form solution")
 
-# The default reccomendation for n.sims
+# The default recommendation for n.sims
 test_that("Error is less than .5 for 10,000 sims", {
   skip_on_cran()
   typeM_sim <- vector(length = 1000)
