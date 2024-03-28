@@ -1,3 +1,13 @@
+retrodesign v0.3 (Release date: 2024-03-27)
+==============
+
+Changes:
+
+* Resolved a bug wherein the type M error for retrodesign was not equal to
+that of retrodesign_closed_form. A test case for this type of issue was
+to prevent this from occuring again.
+
+
 retrodesign v0.2 (Release date: 2023-08-23)
 ==============
 

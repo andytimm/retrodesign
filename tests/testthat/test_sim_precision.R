@@ -4,7 +4,7 @@ library(retrodesign)
 context("make sure that the simulation based method stays
         close to the closed form solution")
 
-test_that("reasonable agreement between full functions", {
+test_that("we reasonable agreement between full functions", {
   skip_on_cran()
   retrodesign_sim <- vector(mode='list', length=1000)
   for (x in 1:1000) {
